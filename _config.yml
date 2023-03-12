@@ -1,5 +1,5 @@
 # Site
-repository: sproogen/resume-theme
+repository: com3dian/com3dian.github.io
 favicon: images/favicon.ico
 
 # Content configuration version
@@ -12,7 +12,7 @@ email: com3dian@outlook.com
 website: https://com3dian.github.io/
 
 # Dark Mode (true/false/never)
-darkmode: false
+darkmode: true
 
 # Social links
 twitter_username: facespics
