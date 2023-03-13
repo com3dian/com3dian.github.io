@@ -48,9 +48,17 @@ linkedin_username: zehao-lu-93923a146
 # about_title: About Me
 about_profile_image: images/profile.jpg
 about_content: | # this will include new lines to allow paragraphs
-  Hi I'm a graduate student major in AI. I have experiences in popular ML/DL libraries includes pytorch, tensorflow, . I'm also a open source lover.
+  Hi I'm a graduate student major in AI. I have experiences in popular ML/DL
+  libraries includes pytorch, tensorflow, keras, sklearn, Scipy. Know some big data
+  processing tools like <mark> Apache Spark</mark>(pyspark). I'm also a open
+  source lover.
 
-  I am also skilled in: <mark>R</mark> programming language and <mark>C</mark>
+  My interests includes NLP/NLG, LLM, reinforcement learning, AI4science
+  and AIops.
+
+  I am mostly sklled in <mark>Python</mark>. I am also skilled in:
+  <mark>R</mark> programming language and <mark>C</mark>. I would like to try
+  <mark>Julia</mark> as well.
 
   Actively learning <mark>C#</mark> for Unity.
 
@@ -64,9 +72,13 @@ content:
         sub_title: MSc Artificial Intelligence
         quote: >
           Founded in 1636, Utrecht University is internationally recognized for
-          its high-quality education and research, and it consistently ranks among the top universities in Europe.
+          its high-quality education and research, and it consistently ranks
+          among the top universities in Europe.
         description: | # this will include new lines to allow paragraphs
-          Courses: Machine Learning for Human Vision and Language, Advanced Machine Learning, Methods in AI Research, Computer Vision, Natural Language Processing, Data Intensive System, Computational Argumentation, Evolutionary Computing
+          Courses: Machine Learning for Human Vision and Language,
+          Advanced Machine Learning, Methods in AI Research, Computer Vision,
+          Natural Language Processing, Data Intensive System,
+          Computational Argumentation, Evolutionary Computing
 
 
 
@@ -77,7 +89,11 @@ content:
         quote: >
           Best Univeristy in China.
         description: | # this will include new lines to allow paragraphs
-
+          Courses: Introduction to Computation, Data Structure and Algorithm,
+          Mathematical Analysis, Linear Algebra, Mathematical Statistics,
+          Probability Theory, Applied Regression Theory, Machine Learning,
+          Statistical Learning, Deep learning, Introduction to Numerical Analysis,
+          Graph Theory
 
   - title: Experience # Title for the section
     layout: list # Type of content section (list/text)
@@ -89,17 +105,23 @@ content:
         sub_title: Machine Learning Intern
         caption: Jan 2023 - Present
         quote: >
-          Assisting companies in leveraging AI to generate business outcomes by offering AI-related services.
+          Assisting companies in leveraging AI to generate business outcomes by
+          offering AI-related services.
         description: | # this will include new lines to allow paragraphs
-          The objective of this graduate internship project is to implement an AI model capable of:
+          The objective of this graduate internship project is to implement an
+          AI model capable of:
 
-            - Analyze a research paper in (editable) .pdf form and extract meaningful content as much as possible;
+            - Analyze a research paper in (editable) .pdf form and extract
+            meaningful content as much as possible;
 
-            - Abstarctively summarizes the extracted contents(mainly text, but could also include tables, pictures, and formulas) and construct the knowledge graph;
+            - Abstarctively summarizes the extracted contents(mainly text, but
+            could also include tables, pictures, and formulas) and construct the knowledge graph;
 
-            - Generate a slide explaining the paper accordingly. The slide can be used in a presentation or to help understand the original paper;
+            - Generate a slide explaining the paper accordingly. The slide can
+            be used in a presentation or to help understand the original paper;
 
-          Other words: fine tune a large language model for text summarization using Google cloud platform.
+          Other words: fine tune a large language model for text summarization
+          using Google cloud platform.
 
 
       - layout: left
@@ -109,18 +131,43 @@ content:
         sub_title: Machine Learning Intern
         caption: Sep 2022 - Dec 2022
         quote: >
-          Assisting companies in leveraging AI to generate business outcomes by offering AI-related services.
+          Assisting companies in leveraging AI to generate business outcomes by
+          offering AI-related services. I was in the [structure data
+          team](https://www.ml6.eu/chapters/structured-data).
         description: | # this will include new lines to allow paragraphs
-          Research similarity metrics(Wasserstein distance) and contribute to python open-source libraries.
+          Research similarity metrics(Wasserstein distance) and contribute to
+          python open-source libraries.
 
-            - Implement the Wasserstein distance metric between distributions in python.
+            - Implement the Wasserstein distance metric between distributions in
+            python.
 
-            - Contribute to open-source communities such as Scipy.
+            - Contribute to open-source communities such as <mark>Scipy</mark>.
 
-            - Apply the Wasserstein metric on the client's data for anomaly detection.
+            - Apply the Wasserstein metric on the client's data for anomaly
+            detection.
 
-          Other words: suggest a [multi dimensional wasserstein_distance function](https://github.com/scipy/scipy/issues/17290) in Scipy and start a PR.
+          Other words: suggest a [multi dimensional wasserstein_distance
+          function](https://github.com/scipy/scipy/issues/17290) in Scipy and
+          start a PR.
 
+      - layout: left
+        title: 4Paradigm
+        link: https://en.4paradigm.com/
+        # link_text: boringcompany.com
+        sub_title: Machine Learning Engineer(one year contract)
+        caption: Sep 2020 - Sep 2021
+        quote: >
+
+        description: | # this will include new lines to allow paragraphs
+          Developing AI algorithms for IT Operations
+            - Developed an algorithm, Kmeans over time serial data, for
+            converting time series to sequences;
+            - Combined the 'Kmeans over time series' algorithm with the CAD_OSE
+            algorithm for contextual anomaly detection;
+            - Applied DeepAR and Prophet algorithm on time series forecasting;
+            - Applied Isolation Tree algorithm on anomaly detection task.
+
+          Other words:
 
   - title: Projects # Title for the section
     layout: list # Type of content section (list/text)
