@@ -48,10 +48,12 @@ linkedin_username: zehao-lu-93923a146
 # about_title: About Me
 about_profile_image: images/profile.jpg
 about_content: | # this will include new lines to allow paragraphs
-  Hi I'm a graduate student major in AI. I have experiences in popular ML/DL
-  libraries includes pytorch, tensorflow, keras, sklearn, Scipy. Know some big data
-  processing tools like <mark> Apache Spark</mark>(pyspark). I'm also a open
-  source lover.
+  Hi I'm a graduate student major in AI. I possess robust mathematical and
+  statistical skills, along with a comprehensive comprehension of both the
+  theoretical and practical aspects of machine learning. I have hands-on
+  experience working with popular ML/DL libraries, such as pytorch, tensorflow,
+  keras, sklearn, Scipy. I am proficient in utilizing <mark>Apache Spark</mark>
+  (pyspark) for big data processing. I'm also a open source lover.
 
   My interests includes Natural Language Processing(**NLP**)/Natural Language
   Generation(**NLG**), Large Language Model(**LLM**), Reinforcement Learning(**RL**),
