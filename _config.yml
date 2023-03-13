@@ -76,7 +76,7 @@ content:
           its high-quality education and research, and it consistently ranks
           among the top universities in Europe.
         description: | # this will include new lines to allow paragraphs
-          *Courses*: Machine Learning for Human Vision and Language,
+          **Courses**: Machine Learning for Human Vision and Language,
           Advanced Machine Learning, Methods in AI Research, Computer Vision,
           Natural Language Processing, Data Intensive System,
           Computational Argumentation, Evolutionary Computing
@@ -90,7 +90,7 @@ content:
         quote: >
           Best Univeristy in China.
         description: | # this will include new lines to allow paragraphs
-          *Courses*: Introduction to Computation, Data Structure and Algorithm,
+          **Courses**: Introduction to Computation, Data Structure and Algorithm,
           Mathematical Analysis, Linear Algebra, Mathematical Statistics,
           Probability Theory, Applied Regression Theory, Machine Learning,
           Statistical Learning, Deep learning, Introduction to Numerical Analysis,
@@ -107,7 +107,7 @@ content:
         caption: Jan 2023 - Present
         quote: >
           Assisting companies in leveraging AI to generate business outcomes by
-          offering AI-related services. I worked with [ NLP
+          offering AI-related services. I worked with [NLP
           chapter](https://www.ml6.eu/chapters/nlp-chapter).
         description: | # this will include new lines to allow paragraphs
           The objective of this graduate internship project is to implement an
@@ -122,7 +122,7 @@ content:
             - Generate a slide explaining the paper accordingly. The slide can
             be used in a presentation or to help understand the original paper;
 
-          Other words: fine tune a large language model for text summarization
+          **Other words**: fine tune a large language model for long text summarization
           using Google cloud platform.
 
 
@@ -131,7 +131,7 @@ content:
         link: https://www.ml6.eu/
         # link_text: boringcompany.com
         sub_title: Machine Learning Intern · Internship
-        caption: Sep 2022 - Dec 2022
+        caption: Sep 2022 - Dec 2022 · 4 mos
         quote: >
           Assisting companies in leveraging AI to generate business outcomes by
           offering AI-related services. I worked with [structure data
@@ -148,7 +148,7 @@ content:
             - Apply the Wasserstein metric on the client's data for anomaly
             detection.
 
-          Other words: suggest a [multi dimensional wasserstein_distance
+          **Other words**: suggest a [multi dimensional wasserstein_distance
           function](https://github.com/scipy/scipy/issues/17290) in Scipy and
           start a PR.
 
@@ -157,7 +157,7 @@ content:
         link: https://en.4paradigm.com/
         # link_text: boringcompany.com
         sub_title: Machine Learning Engineer(one year contract) · Full-time
-        caption: Aug 2020 - Aug 2021
+        caption: Aug 2020 - Aug 2021 · 1 yr 1 mo
         quote: >
           Developing Data center and modern machine learning database. I worked
           in the AI team of the time serial data center development department.
@@ -170,14 +170,14 @@ content:
             - Applied DeepAR and Prophet algorithm on time series forecasting;
             - Applied Isolation Tree algorithm on anomaly detection task.
 
-          Other words: design, test and apply algorithms on time serial data.
+          **Other words**: design, test and apply algorithms on time serial data.
 
       - layout: left
         title: BMW China
         link: https://www.bmw.com.cn/
         # link_text: boringcompany.com
-        sub_title: Machine Learning Intern
-        caption: Sep 2019 - Dec 2019 · 4 months
+        sub_title: Machine Learning Intern · Internship
+        caption: Sep 2019 - Dec 2019 · 4 mos
         quote: >
           Developing Data center and modern machine learning database. I worked
           in the AI team of the time serial data center development department.
@@ -188,7 +188,7 @@ content:
             statistical theory;
             - Risk analysis of financial loans given to customers.
 
-          Other words: design, test and apply algorithms on time serial data.
+          **Other words**: design, test and apply algorithms on time serial data.
 
   - title: Projects # Title for the section
     layout: list # Type of content section (list/text)
