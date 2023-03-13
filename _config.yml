@@ -53,9 +53,9 @@ about_content: | # this will include new lines to allow paragraphs
   processing tools like <mark> Apache Spark</mark>(pyspark). I'm also a open
   source lover.
 
-  My interests includes Natural Language Processing(NLP)/Natural Language
-  Generation(NLG), Large Language Model(LLM), Reinforcement Learning(RL), AI4science
-  and (AI for IT Operations)AIops.
+  My interests includes Natural Language Processing(**NLP**)/Natural Language
+  Generation(**NLG**), Large Language Model(**LLM**), Reinforcement Learning(**RL**),
+  **AI4science** and AI for IT Operations(**AIops**).
 
   I am mostly sklled in <mark>Python</mark>. I am also skilled in:
   <mark>R</mark> programming language and <mark>C</mark>. I would like to try
@@ -123,7 +123,7 @@ content:
             be used in a presentation or to help understand the original paper;
 
           **Other words**: fine tune a large language model for long text summarization
-          using Google cloud platform.
+          using Google cloud platform(<mark>GCP</mark>).
 
 
       - layout: left
