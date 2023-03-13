@@ -107,8 +107,8 @@ content:
         caption: Jan 2023 - Present
         quote: >
           Assisting companies in leveraging AI to generate business outcomes by
-          offering AI-related services. I worked with [NLP
-          chapter](https://www.ml6.eu/chapters/nlp-chapter).
+          offering AI-related services. I worked with NLP
+          chapter(https://www.ml6.eu/chapters/nlp-chapter).
         description: | # this will include new lines to allow paragraphs
           The objective of this graduate internship project is to implement an
           AI model capable of:
