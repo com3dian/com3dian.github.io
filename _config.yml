@@ -119,7 +119,8 @@ content:
             meaningful content as much as possible;
 
             - Abstarctively summarizes the extracted contents(mainly text, but
-            could also include tables, pictures, and formulas) and construct the knowledge graph;
+            could also include tables, pictures, and formulas) and construct the
+            knowledge graph;
 
             - Generate a slide explaining the paper accordingly. The slide can
             be used in a presentation or to help understand the original paper;
@@ -143,16 +144,16 @@ content:
           python open-source libraries.
 
             - Implement the Wasserstein distance metric between distributions in
-            python.
+            python;
 
-            - Contribute to open-source communities such as <mark>Scipy</mark>.
+            - Contribute to open-source communities such as <mark>Scipy</mark>;
 
             - Apply the Wasserstein metric on the client's data for anomaly
             detection.
 
           **Other words**: suggest a [multi dimensional wasserstein_distance
           function](https://github.com/scipy/scipy/issues/17290) in Scipy and
-          start a PR.
+          start a [PR](https://github.com/scipy/scipy/pull/17473).
 
       - layout: left
         title: 4Paradigm
@@ -190,7 +191,8 @@ content:
             statistical theory;
             - Risk analysis of financial loans given to customers.
 
-          **Other words**: design, test and apply algorithms on time serial data.
+          **Other words**: apply decision tree-based(GBDT, random forest) model
+          on clients' regular repayment records to predict risk.
 
   - title: Projects # Title for the section
     layout: list # Type of content section (list/text)
