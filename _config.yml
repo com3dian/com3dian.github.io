@@ -90,7 +90,9 @@ content:
         caption: 2010 - 2013
         sub_title: BSc Mathematics
         quote: >
-          Best Univeristy in China.
+          Best Univeristy in China. It is ranked #12 in QS World University
+          Rankings 2023 ->
+          https://www.topuniversities.com/universities/peking-university .
         description: | # this will include new lines to allow paragraphs
           **Courses**: Introduction to Computation, Data Structure and Algorithm,
           Mathematical Analysis, Linear Algebra, Mathematical Statistics,
@@ -110,7 +112,7 @@ content:
         quote: >
           Assisting companies in leveraging AI to generate business outcomes by
           offering AI-related services. I worked with NLP
-          chapter(https://www.ml6.eu/chapters/nlp-chapter).
+          chapter -> https://www.ml6.eu/chapters/nlp-chapter).
         description: | # this will include new lines to allow paragraphs
           The objective of this graduate internship project is to implement an
           AI model capable of:
@@ -126,7 +128,7 @@ content:
             be used in a presentation or to help understand the original paper;
 
           **Other words**: fine tune a large language model for long text summarization
-          using Google cloud platform(<mark>GCP</mark>).
+          using Google cloud platform (<mark>GCP</mark>).
 
 
       - layout: left
@@ -137,8 +139,8 @@ content:
         caption: Sep 2022 - Dec 2022 · 4 mos
         quote: >
           Assisting companies in leveraging AI to generate business outcomes by
-          offering AI-related services. I worked with [structure data
-          team](https://www.ml6.eu/chapters/structured-data).
+          offering AI-related services. I worked with structure data
+          team -> https://www.ml6.eu/chapters/structured-data.
         description: | # this will include new lines to allow paragraphs
           Research similarity metrics(Wasserstein distance) and contribute to
           python open-source libraries.
@@ -191,25 +193,25 @@ content:
             statistical theory;
             - Risk analysis of financial loans given to customers.
 
-          **Other words**: apply decision tree-based(GBDT, random forest) model
+          **Other words**: apply decision tree-based (GBDT, random forest) model
           on clients' regular repayment records to predict risk.
 
   - title: Projects # Title for the section
     layout: list # Type of content section (list/text)
     content:
       - layout: top-middle
-        title: Super awesome project
-        link: github.com/sproogen
+        title: Nomogram Detection Project
+        link: github.com/com3dian/nomodetect/
         # link_text: Project Website
         additional_links:
           - title:  sproogen/modern-resume-theme
             icon: fab fa-github
-            url: github.com/sproogen/modern-resume-theme
+            url: github.com/com3dian/nomodetect/
           # - title:  Github page for project (eg. sproogen/modern-resume-theme)
           #   icon: fab fa-github
           #   url: Link to project (eg. sproogen.github.io/modern-resume-theme)
         quote: >
-          This is probably one of the greatest apps ever created, if you don't agree you're probably wrong.
+
         description: | # this will include new lines to allow paragraphs
           I started this project as a way if learning <mark>React</mark> and it has since grown into a fully fledged app. I have learned many skills through this and been I'm very proud of having this in my portfolio. If you don't have a project as awesome as this I would advise you make one.
 
