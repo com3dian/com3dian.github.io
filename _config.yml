@@ -230,7 +230,8 @@ content:
       - Play with AI art (the profile picture is produced by stable diffusion
       using my own picture!)
 
-      Look at the other generated pictures! \n ![Avatar](/images/Twitter-Сover-Photo-Collage-2.jpg)
+      Look at the other generated pictures!
+      ![Avatar](/images/Twitter-Сover-Photo-Collage-2.jpg)
 
 # Footer
 footer_show_references: true
