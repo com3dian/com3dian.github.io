@@ -213,7 +213,7 @@ content:
         quote: >
 
         description: | # this will include new lines to allow paragraphs
-          I implement this program in order to detect the precise coordinates of
+          I implement this program in order to precisely detect the coordinates of
           the scales in nomogram images, which is widely used in medical research
           papers.
 
@@ -222,13 +222,15 @@ content:
   - title: A Little More About Me
     layout: text
     content: | # this will include new lines to allow paragraphs
-      Alongside my interests in networks and software engineering some of my other interests and hobbies are:
+      Alongside my interests in networks and software engineering some of my
+      other interests and hobbies are:
       - Football
       - Gaming
       - Knitting
-      - Play with AI art
+      - Play with AI art (the profile picture is produced by stable diffusion
+      using my own picture!)
 
-      Look at this cool image ![Trees](/images/landscape-trees.jpg)
+      Look at the other generated pictures![Avatar](/images/.jpg "Avatar")
 
 # Footer
 footer_show_references: true
