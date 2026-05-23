@@ -1,19 +1,19 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: "Zehao's Log",
+  title: "Lu's Log",
   author: 'Zehao Lu',
-  headerTitle: "Zehao's Log",
+  headerTitle: "Lu's Log",
   description:
-    "Hi, this is Zehao. I'm documenting my learning notes in this blog — research, engineering, and things I find worth writing down.",
+    "Hi, this is Zehao Lu. I'm documenting my learning notes in this blog — research, engineering, and things I find worth writing down.",
   language: 'en-us',
-  theme: 'light',
+  theme: 'dark',
   siteUrl: 'https://com3dian.github.io',
   siteRepo: 'https://github.com/com3dian/com3dian.github.io',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
   email: 'com3dian@outlook.com',
   github: 'https://github.com/com3dian',
-  linkedin: 'https://www.linkedin.com',
+  linkedin: 'https://www.linkedin.com/in/zehao-lu/',
   locale: 'en-US',
   stickyNav: false,
   analytics: {

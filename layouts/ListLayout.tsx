@@ -70,7 +70,7 @@ export default function ListLayout({
       <div className="pt-8 pb-6">
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{title}</h1>
       </div>
-      <ul className="border-t border-gray-200 dark:border-gray-700">
+      <ul>
         {!displayPosts.length && (
           <li className="py-6 text-gray-500 dark:text-gray-400">No posts found.</li>
         )}

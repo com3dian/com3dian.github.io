@@ -22,7 +22,7 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
     <SectionContainer>
       <ScrollTopAndComment />
       <article>
-        <header className="border-b border-gray-200 pb-8 pt-6 dark:border-gray-700">
+        <header className="pb-8 pt-6">
           <time
             dateTime={date}
             className="text-sm text-gray-500 dark:text-gray-400"
@@ -34,7 +34,7 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
           </div>
         </header>
         <div className="prose dark:prose-invert max-w-none py-8">{children}</div>
-        <footer className="space-y-6 border-t border-gray-200 pt-8 text-sm dark:border-gray-700">
+        <footer className="space-y-6 pt-8 text-sm">
           {(prev?.path || next?.path) && (
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
               {prev?.path && (

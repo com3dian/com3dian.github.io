@@ -85,7 +85,7 @@ export default function ListLayoutWithTags({
         </div>
         <div className="flex sm:gap-16">
           <aside className="hidden max-h-screen min-w-[200px] max-w-[220px] shrink-0 overflow-auto sm:block">
-            <div className="border-r border-gray-200 pr-6 dark:border-gray-700">
+            <div className="pr-6">
               {pathname.startsWith('/blog') ? (
                 <p className="text-sm font-medium text-gray-900 dark:text-gray-100">All posts</p>
               ) : (
@@ -121,7 +121,7 @@ export default function ListLayoutWithTags({
             </div>
           </aside>
           <div className="min-w-0 flex-1">
-            <ul className="border-t border-gray-200 dark:border-gray-700">
+            <ul>
               {displayPosts.map((post) => {
                 const { path, date, title: postTitle } = post
                 return (

@@ -4,7 +4,7 @@ import SocialIcon from '@/components/social-icons'
 
 export default function Footer() {
   return (
-    <footer className="mt-16 border-t border-gray-200 pt-8 dark:border-gray-700">
+    <footer className="mt-16 pt-8">
       <div className="flex flex-col items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
         <div className="flex space-x-4">
           {siteMetadata.email && (

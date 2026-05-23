@@ -12,7 +12,7 @@ export default function Home({ posts }) {
           {siteMetadata.description}
         </p>
       </div>
-      <ul className="border-t border-gray-200 dark:border-gray-700">
+      <ul>
         {!posts.length && (
           <li className="py-6 text-gray-500 dark:text-gray-400">No posts found.</li>
         )}
