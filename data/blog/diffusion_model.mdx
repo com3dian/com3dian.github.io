@@ -7,4 +7,6 @@ summary: 'Notes on diffusion models.'
 authors: ['default']
 ---
 
-Content coming soon.
+Generative diffusion models reframe sample generation as an iterative denoising process: starting from pure Gaussian noise, they learn to reverse a carefully designed forward diffusion that gradually corrupts data.
+
+This paper presents a unified derivation of two foundational approaches---[Denoising Diffusion Probabilistic Models (DDPM)](https://arxiv.org/abs/2006.11239) and [Denoising Diffusion Implicit Models (DDIM)](https://arxiv.org/abs/2010.02502)---tracing them from their variational autoencoder roots. We show how the training objective emerges naturally from the evidence lower bound (ELBO), reducing to a simple noise-prediction loss, and how the sampling procedure can be understood through its connection to score matching. Within this unified view, DDIM arises as a deterministic limit of DDPM, enabling accelerated sampling through a non-Markovian forward process while preserving the same marginal distributions and training objective.
