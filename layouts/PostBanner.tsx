@@ -9,15 +9,17 @@ import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import CollapsibleTOC, { TocHeading } from '@/components/CollapsibleTOC'
 
 interface LayoutProps {
   content: CoreContent<Blog>
+  toc?: TocHeading[]
   children: ReactNode
   next?: { path: string; title: string }
   prev?: { path: string; title: string }
 }
 
-export default function PostMinimal({ content, next, prev, children }: LayoutProps) {
+export default function PostMinimal({ content, toc, next, prev, children }: LayoutProps) {
   const { slug, title, images } = content
   const displayImage =
     images && images.length > 0 ? images[0] : 'https://picsum.photos/seed/picsum/800/400'
@@ -37,6 +39,11 @@ export default function PostMinimal({ content, next, prev, children }: LayoutPro
             </div>
             <div className="relative pt-10">
               <PageTitle>{title}</PageTitle>
+              {toc && (
+                <div className="mx-auto mt-6 max-w-2xl text-left">
+                  <CollapsibleTOC toc={toc} />
+                </div>
+              )}
             </div>
           </div>
           <div className="prose dark:prose-invert max-w-none py-4">{children}</div>

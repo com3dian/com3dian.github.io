@@ -7,33 +7,33 @@ import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import CollapsibleTOC, { TocHeading } from '@/components/CollapsibleTOC'
 
 interface LayoutProps {
   content: CoreContent<Blog>
+  toc?: TocHeading[]
   children: ReactNode
   next?: { path: string; title: string }
   prev?: { path: string; title: string }
 }
 
-export default function PostLayout({ content, next, prev, children }: LayoutProps) {
+export default function PostLayout({ content, toc, next, prev, children }: LayoutProps) {
   const { date, title } = content
 
   return (
     <SectionContainer>
       <ScrollTopAndComment />
       <article>
-        <header className="pb-8 pt-6">
-          <time
-            dateTime={date}
-            className="text-sm text-gray-500 dark:text-gray-400"
-          >
+        <header className="pt-6 pb-8">
+          <time dateTime={date} className="text-sm text-gray-500 dark:text-gray-400">
             {formatDate(date, siteMetadata.locale)}
           </time>
           <div className="mt-3">
             <PageTitle>{title}</PageTitle>
           </div>
+          {toc && <CollapsibleTOC toc={toc} />}
         </header>
-        <div className="prose dark:prose-invert max-w-none py-8">{children}</div>
+        <div className="prose dark:prose-invert max-w-none pb-8">{children}</div>
         <footer className="space-y-6 pt-8 text-sm">
           {(prev?.path || next?.path) && (
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
