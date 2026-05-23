@@ -63,7 +63,7 @@ export default function PostLayout({
                 <PageTitle>{title}</PageTitle>
               </div>
               {toc && (
-                <div className="mx-auto mt-6 max-w-2xl text-left">
+                <div className="mt-6 text-left">
                   <CollapsibleTOC toc={toc} />
                 </div>
               )}

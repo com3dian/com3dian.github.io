@@ -40,7 +40,7 @@ export default function PostMinimal({ content, toc, next, prev, children }: Layo
             <div className="relative pt-10">
               <PageTitle>{title}</PageTitle>
               {toc && (
-                <div className="mx-auto mt-6 max-w-2xl text-left">
+                <div className="mt-6 text-left">
                   <CollapsibleTOC toc={toc} />
                 </div>
               )}

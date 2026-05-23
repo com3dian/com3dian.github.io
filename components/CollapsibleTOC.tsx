@@ -13,7 +13,7 @@ interface CollapsibleTOCProps {
 }
 
 export default function CollapsibleTOC({ toc, defaultOpen = true }: CollapsibleTOCProps) {
-  const hasHeadings = toc?.some((heading) => heading.depth >= 2 && heading.depth <= 6)
+  const hasHeadings = toc?.some((heading) => heading.depth >= 1 && heading.depth <= 6)
   if (!hasHeadings) {
     return null
   }
@@ -37,7 +37,7 @@ export default function CollapsibleTOC({ toc, defaultOpen = true }: CollapsibleT
       <nav className="mt-3 pt-3" aria-label="Table of contents">
         <TOCInline
           toc={toc}
-          fromHeading={2}
+          fromHeading={1}
           toHeading={6}
           ulClassName="list-none space-y-1.5 pl-0 [&_a]:text-gray-700 [&_a]:no-underline [&_a]:hover:text-primary-600 dark:[&_a]:text-gray-300 dark:[&_a]:hover:text-primary-400 [&_ul]:mt-1.5 [&_ul]:list-none [&_ul]:space-y-1.5 [&_ul]:pl-4"
         />

@@ -21,8 +21,6 @@ When writing this essay, I also read and learned a lot from several blog posts, 
 - [Weng (2021): Diffusion Models Blog](lilianweng.github.io/posts/2021-07-11-diffusion-models/)
 - [Song et al. (2021): Score-Based Generative Modeling](https://yang-song.net/blog/2021/score/)
 
----
-
 ## Notations
 
 For convenience of later derivations, we list the required notations below.

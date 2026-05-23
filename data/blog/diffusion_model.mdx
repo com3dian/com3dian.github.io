@@ -1,5 +1,5 @@
 ---
-title: 'Diffusion Models'
+title: 'Diffusion Models: A Unified View of Learning to Sample'
 date: '2026-05-23'
 tags: ['generative AI', 'computer vision']
 draft: false
@@ -34,7 +34,7 @@ When writing this essay, I also read and learned a lot from several blog posts, 
 
 For convenience of later derivations, we list the required notations below.
 
-### Data and distributions
+*Data and distributions*
 - $x$, $x_0$: data point drawn from the target distribution  
 - $p_{\text{data}}(x)$: unknown target distribution we want to sample from  
 - $p_\theta(x)$: learned model distribution parameterized by $\theta$  
@@ -43,18 +43,18 @@ For convenience of later derivations, we list the required notations below.
 - $p(x, z)$: joint distribution of $x$ and $z$  
 - $p(x \mid z)$: conditional distribution of data given latent variable  
 
-### Variational Inference (VAE)
+*Variational Inference (VAE)*
 - $\phi, \theta$: encoder and decoder parameters  
 - $q_\phi(z \mid x)$: approximate posterior (encoder)  
 - $p_\theta(x \mid z)$: decoder / likelihood  
 - $\mu_\phi(x), \sigma_\phi^2(x)$: encoder outputs  
 
-### Distributions and metrics
+*Distributions and metrics*
 - $\mathcal{N}(\mu, \Sigma)$: Gaussian distribution  
 - $D_{KL}(P \parallel Q)$: KL divergence  
 - $\mathbb{E}_q[\cdot]$: expectation under $q$  
 
-### DDPM & diffusion process
+*DDPM & diffusion process*
 - $t$: timestep in $\{1, \dots, T\}$  
 - $x_t$: latent variable at timestep $t$  
 - $\alpha_t$: noise schedule coefficient  
@@ -65,20 +65,20 @@ For convenience of later derivations, we list the required notations below.
 - $\hat{\epsilon}_\theta(x_t, t)$: noise prediction network  
 - $\mu_\theta(x_t, t)$: predicted reverse mean  
 
-### DDIM
+*DDIM*
 - $\sigma_t$: stochasticity parameter  
 - $S$: number of sampling steps  
 - $\tau$: subset of timesteps  
 - $q_\sigma$: DDIM sampling distribution  
 
-### Score-based models
+*Score-based models*
 - $\nabla_x \log p(x)$: score function  
 - $s_\theta(x, t)$: learned score network  
 - $\eta_t$: noise scale  
 - $p_t(x_t)$: noisy marginal distribution  
 - $\lambda(t)$: weighting function  
 
-### Langevin dynamics
+*Langevin dynamics*
 - $\gamma$: step size  
 - $z_t \sim \mathcal{N}(0, I)$: injected noise  
 - $n$: timestep index for score updates  
