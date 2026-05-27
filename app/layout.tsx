@@ -64,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang={siteMetadata.language}
-      className={`${notoSans.variable} scroll-smooth font-sans`}
+      className={`${notoSans.variable} scroll-smooth font-sans bg-white dark:bg-[rgb(29, 30, 32)]`}
       suppressHydrationWarning
     >
       <link
@@ -94,7 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
-      <body className="dark:bg-[rgb(29, 30, 32)] bg-white pl-[calc(100vw-100%)] text-gray-900 antialiased dark:text-[rgb(222,222,222)]">
+      <body className="pl-[calc(100vw-100%)] text-gray-900 antialiased dark:text-[rgb(222,222,222)]">
         <ThemeProviders>
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
           <SectionContainer>
