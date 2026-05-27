@@ -73,3 +73,89 @@ For convenience of later derivations, we list the required notations below.
 - $\gamma$: step size  
 - $z_t \sim \mathcal{N}(0, I)$: injected noise  
 - $n$: timestep index for score updates  
+
+# Variational AutoEncoders {#sec:VAE}
+
+In this section, we discuss the foundations of diffusion models, along with key aspects of their implementation, including the learning objective and how it is derived. Due to page limitations, some topics—such as text guidance—are not covered.
+
+As discussed earlier, one common approach to generative modeling is to learn a transformation from a known, easy-to-sample distribution $p(z)$ to an unknown data distribution $p_{\text{data}}(x)$, which describes real data.
+
+In general, this transformation is not available in closed form. Instead, it can be learned by defining a trainable objective (i.e., a loss function) that measures the difference between the model distribution $p_{\theta}(x)$ and the data distribution $p_{\text{data}}(x)$, and optimizing it using a neural network. The optimal parameters then define a model that approximates the target distribution. In this way, the problem of generating data is reduced to defining and solving an optimization problem.
+
+> **Assumption 1** {#ass:regular-transform}  
+> There exists a sufficiently regular transformation from $p(z)$ to $p_{\text{data}}(x)$ that can be approximated by a neural network.
+
+Assumption [1](#ass:regular-transform) ensures that the model has enough expressive power to represent the target distribution. This assumption is nontrivial, since not every pair of distributions can be related through such a transformation in a well-behaved manner. For example, when the target distribution is singular (such as a Dirac delta distribution) while the model distribution is continuous (such as a Gaussian), the Kullback--Leibler divergence can become infinite, indicating a fundamental mismatch between the two distributions. In such cases, directly approximating the target distribution can be challenging.
+
+We now turn to how to define the optimization problem. For simplicity, we use a Gaussian distribution as the base distribution $p(z)$, leveraging its convenient mathematical properties.
+
+## Evidence Lower Bound (ELBO)
+
+To define the optimization problem, a natural approach is to use likelihood-based learning. Given a dataset $\{x_i\}_{i=1}^N$, the objective is to maximize the likelihood of the data under the model, i.e., maximize $p_\theta(x_i)$ for all samples. A naive approach might be to sample latent variables $z_i$ from a Gaussian distribution and arbitrarily associate them with data samples $x_i$, then optimize the likelihood based on these random pairings. However, this approach is flawed because such random pairings do not establish a meaningful relationship between the latent variables and the data samples. As a result, the model cannot learn how changes in the latent space correspond to variations in the data. Instead, it may rely on overall statistics of the dataset and largely ignore the latent variables. Under common training objectives, this can lead to outputs that resemble an average of the data distribution, rather than distinct and realistic samples.
+
+This issue suggests that, to learn a meaningful transformation, it is not sufficient to consider only the marginal likelihood $p_\theta(x)$. Instead, we should explicitly model the relationship between $x$ and $z$. To achieve this, we introduce the conditional distribution $p(x \mid z)$, which describes how a data point $x$ is generated from a latent variable $z$. This provides the necessary structure to guide the learning process and establish a meaningful mapping between the latent space and the data space.
+
+We introduce a variational distribution $q_\phi(z \mid x)$ to approximate the intractable posterior $p(z \mid x)$, where $\phi$ denotes the parameters to be optimized. This allows us to reformulate the objective in terms of the marginal likelihood $p_\theta(x)$ and work with its logarithm, $\log p_\theta(x)$, which is more convenient for optimization.
+
+Consider log likelihood:
+
+\begin{align}
+\log p(x) 
+&= \log p(x) \int q_{\phi}(z \mid x)\, dz \\
+&= \int \log p(x)\, q_{\phi}(z \mid x)\, dz \\
+&= \mathbb{E}_{q_{\phi}(z \mid x)} \left[ \log p(x) \right] \\
+&= \mathbb{E}_{q_{\phi}(z \mid x)} \left[ \log \frac{p(x, z)}{p(z \mid x)} \right] \\
+&= \mathbb{E}_{q_{\phi}(z \mid x)} \left[ 
+\log \frac{p(x, z)}{p(z \mid x)} \cdot \frac{q_{\phi}(z \mid x)}{q_{\phi}(z \mid x)}  
+\right] \\
+&= \mathbb{E}_{q_{\phi}(z \mid x)} \left[
+\log \frac{p(x, z)}{q_{\phi}(z \mid x)}
++ \log \frac{q_{\phi}(z \mid x)}{p(z \mid x)}
+\right] \\
+&= \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log \frac{p(x, z)}{q_{\phi}(z \mid x)}\right] + D_{KL} (q_{\phi}(z \mid x) \lVert p(z \mid x)) \\
+&\geq \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log \frac{p(x, z)}{q_{\phi}(z \mid x)}\right]
+\label{eq:elbo}
+\end{align}
+
+The derivation shows that it can be expressed as the sum of a lower bound and a KL divergence term between the approximate posterior and the true posterior. Since the KL divergence is non-negative, the resulting expression provides a lower bound on $\log p_\theta(x)$, which is referred to as the Evidence Lower Bound (ELBO). The ELBO is used as the optimization objective in VAEs. This is motivated by two key reasons. First, it provides a tractable lower bound on the log-likelihood, and maximizing it indirectly improves the data likelihood. Second, it introduces a framework for learning a structured latent representation, where we explicitly model how data points are generated from latent variables. Although the exact KL term between the approximate posterior and the true posterior is intractable, maximizing the ELBO avoids computing it directly. Since $\log p_\theta(x)$ does not depend on $\phi$, maximizing the ELBO is equivalent to making the approximate posterior closer to the true posterior.
+
+We now rewrite the ELBO in a more interpretable form.
+
+\begin{align}
+\mathbb{E}_{q_{\phi}(z \mid x)} \left[\log \frac{p(x, z)}{q_{\phi}(z \mid x)}\right]
+&= \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log \frac{p(x|z)p(z)}{q_{\phi}(z \mid x)}\right] \\
+&= \mathbb{E}_{q_{\phi}(z \mid x)} \log p(x|z) + \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log\left(\frac{p(z)}{q_{\phi}(z \mid x)}\right)\right] \\
+&= \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log p(x|z)\right] - D_{KL} (q_{\phi}(z \mid x) \lVert p(z))
+\end{align}
+
+The resulting expression consists of two terms. The first term corresponds to a reconstruction objective, which encourages accurate generation of data from latent variables. The second term is a KL divergence between the approximate posterior $q_\phi(z \mid x)$ and the prior $p(z)$, which regularizes the latent representation to stay close to a simple distribution.
+
+In practice, this objective is optimized using two neural networks: one parameterizing the encoder $q_\phi(z \mid x)$, and the other parameterizing the decoder $p_\theta(x \mid z)$.
+
+## Training and Reparameterization
+
+In VAEs, the encoder is modeled as a Gaussian distribution parameterized by $\phi$, while the prior distribution over the latent variable is chosen to be a standard Gaussian:
+
+\begin{align}
+q_{\phi}(z \mid x) = \mathcal{N}(\mu_{\phi}(x), \sigma_{\phi}^{2}(x)); 
+\qquad 
+p(z) = \mathcal{N}(0, I)
+\end{align}
+
+Therefore, the encoder is trained to predict the mean and variance of the latent variable $z$ given a data sample $x$.
+
+The reconstruction term in the ELBO can be approximated using Monte Carlo sampling with latent variables sampled from $q_{\phi}(z \mid x)$. However, the sampling operation itself is not differentiable, preventing gradients from being propagated through the network during backpropagation. To address this issue, we use the *reparameterization trick*. Instead of directly sampling from $\mathcal{N}(\mu_{\phi}(x), \sigma_{\phi}^{2}(x))$, we first sample
+
+$$
+\epsilon \sim \mathcal{N}(0, I),
+$$
+
+and then compute
+
+\begin{align}
+z = \mu_{\phi}(x) + \sigma_{\phi}(x) \odot \epsilon
+\end{align}
+
+where $\odot$ denotes element-wise multiplication.
+
+After training, the VAE consists of an encoder $q_\phi(z \mid x)$ and a decoder $p_\theta(x \mid z)$. To generate new data, we first sample a latent variable $z$ from the prior distribution $\mathcal{N}(0, I)$ and then pass it through the decoder $p_\theta(x \mid z)$. In the generation process, only the decoder is used to produce samples, while the encoder is introduced during training to establish the relationship between the data space and the latent space.
