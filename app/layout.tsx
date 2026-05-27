@@ -67,15 +67,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${notoSans.variable} scroll-smooth bg-white font-sans dark:bg-[#1d1e20]`}
       suppressHydrationWarning
     >
-      <link rel="icon" href={`${basePath}/favicon.ico?v=2`} sizes="48x48" />
-      <link rel="icon" type="image/png" href={`${basePath}/favicon-32.png?v=2`} sizes="32x32" />
+      <link rel="icon" href={`${basePath}/favicon.ico?v=3`} sizes="48x48" />
+      <link rel="icon" type="image/png" href={`${basePath}/favicon-32.png?v=3`} sizes="32x32" />
       <link
         rel="icon"
         type="image/svg+xml"
-        href={`${basePath}/static/favicons/favicon.svg?v=2`}
+        href={`${basePath}/static/favicons/favicon.svg?v=3`}
         sizes="any"
       />
-      <link rel="apple-touch-icon" href={`${basePath}/static/favicons/apple-touch-icon.png?v=2`} />
+      <link rel="apple-touch-icon" href={`${basePath}/static/favicons/apple-touch-icon.png?v=3`} />
       <link rel="manifest" href={`${basePath}/static/favicons/site.webmanifest`} />
       <meta name="msapplication-TileColor" content="#000000" />
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
