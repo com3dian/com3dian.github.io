@@ -63,7 +63,7 @@ export default function PostLayout({
                 <PageTitle>{title}</PageTitle>
               </div>
               {toc && (
-                <div className="mt-6 text-left">
+                <div className="mt-8 text-left">
                   <CollapsibleTOC toc={toc} />
                 </div>
               )}
@@ -108,7 +108,7 @@ export default function PostLayout({
               </dd>
             </dl>
             <div className="xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose dark:prose-invert max-w-none pt-10 pb-8">{children}</div>
+              <div className="prose dark:prose-invert max-w-none pt-4 pb-8">{children}</div>
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
                 <Link href={discussUrl(path)} rel="nofollow">
                   Discuss on Twitter

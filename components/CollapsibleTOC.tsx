@@ -20,7 +20,7 @@ export default function CollapsibleTOC({ toc, defaultOpen = true }: CollapsibleT
 
   return (
     <details
-      className="group mb-8 rounded-md bg-gray-50/80 px-4 py-3 dark:bg-gray-900/40"
+      className="group mb-8 rounded-md bg-gray-50/80 px-4 py-3 dark:bg-gray-800/40"
       open={defaultOpen}
     >
       <summary className="cursor-pointer list-none text-sm font-medium text-gray-800 select-none marker:content-none dark:text-gray-200 [&::-webkit-details-marker]:hidden">
