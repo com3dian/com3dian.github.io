@@ -1,14 +1,14 @@
 {
-  "name": "",
-  "short_name": "",
+  "name": "com3dian",
+  "short_name": "com3dian",
   "icons": [
     {
-      "src": "/android-chrome-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png"
+      "src": "/static/favicons/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ],
-  "theme_color": "#000000",
-  "background_color": "#000000",
+  "theme_color": "#1d1e20",
+  "background_color": "#ffffff",
   "display": "standalone"
 }
