@@ -64,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang={siteMetadata.language}
-      className={`${notoSans.variable} scroll-smooth font-sans bg-white dark:bg-[rgb(29, 30, 32)]`}
+      className={`${notoSans.variable} dark:bg-[rgb(29, 30, 32)] scroll-smooth bg-white font-sans`}
       suppressHydrationWarning
     >
       <link
