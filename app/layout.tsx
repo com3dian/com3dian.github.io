@@ -75,10 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         href={`${basePath}/static/favicons/favicon.svg?v=2`}
         sizes="any"
       />
-      <link
-        rel="apple-touch-icon"
-        href={`${basePath}/static/favicons/apple-touch-icon.png?v=2`}
-      />
+      <link rel="apple-touch-icon" href={`${basePath}/static/favicons/apple-touch-icon.png?v=2`} />
       <link rel="manifest" href={`${basePath}/static/favicons/site.webmanifest`} />
       <meta name="msapplication-TileColor" content="#000000" />
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
