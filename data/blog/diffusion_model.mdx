@@ -109,6 +109,7 @@ We introduce a variational distribution $q_\phi(z \mid x)$ to approximate the in
 
 Consider log likelihood:
 
+$$
 \begin{align}
 \log p(x) 
 &= \log p(x) \int q_{\phi}(z \mid x)\, dz \\
@@ -126,17 +127,20 @@ Consider log likelihood:
 &\geq \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log \frac{p(x, z)}{q_{\phi}(z \mid x)}\right]
 \label{eq:elbo}
 \end{align}
+$$
 
 The derivation shows that it can be expressed as the sum of a lower bound and a KL divergence term between the approximate posterior and the true posterior. Since the KL divergence is non-negative, the resulting expression provides a lower bound on $\log p_\theta(x)$, which is referred to as the Evidence Lower Bound (ELBO). The ELBO is used as the optimization objective in VAEs. This is motivated by two key reasons. First, it provides a tractable lower bound on the log-likelihood, and maximizing it indirectly improves the data likelihood. Second, it introduces a framework for learning a structured latent representation, where we explicitly model how data points are generated from latent variables. Although the exact KL term between the approximate posterior and the true posterior is intractable, maximizing the ELBO avoids computing it directly. Since $\log p_\theta(x)$ does not depend on $\phi$, maximizing the ELBO is equivalent to making the approximate posterior closer to the true posterior.
 
 We now rewrite the ELBO in a more interpretable form.
 
+$$
 \begin{align}
 \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log \frac{p(x, z)}{q_{\phi}(z \mid x)}\right]
 &= \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log \frac{p(x|z)p(z)}{q_{\phi}(z \mid x)}\right] \\
 &= \mathbb{E}_{q_{\phi}(z \mid x)} \log p(x|z) + \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log\left(\frac{p(z)}{q_{\phi}(z \mid x)}\right)\right] \\
 &= \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log p(x|z)\right] - D_{KL} (q_{\phi}(z \mid x) \lVert p(z))
 \end{align}
+$$
 
 The resulting expression consists of two terms. The first term corresponds to a reconstruction objective, which encourages accurate generation of data from latent variables. The second term is a KL divergence between the approximate posterior $q_\phi(z \mid x)$ and the prior $p(z)$, which regularizes the latent representation to stay close to a simple distribution.
 
@@ -146,11 +150,13 @@ In practice, this objective is optimized using two neural networks: one paramete
 
 In VAEs, the encoder is modeled as a Gaussian distribution parameterized by $\phi$, while the prior distribution over the latent variable is chosen to be a standard Gaussian:
 
+$$
 \begin{align}
-q_{\phi}(z \mid x) = \mathcal{N}(\mu_{\phi}(x), \sigma_{\phi}^{2}(x)); 
-\qquad 
-p(z) = \mathcal{N}(0, I)
+q_{\phi}(z \mid x) = \mathcal{N}(\mu_{\phi}(x), \sigma_{\phi}^{2}(x)); \\
+\qquad \\
+ p(z) = \mathcal{N}(0, I)
 \end{align}
+$$
 
 Therefore, the encoder is trained to predict the mean and variance of the latent variable $z$ given a data sample $x$.
 
@@ -162,9 +168,11 @@ $$
 
 and then compute
 
+$$
 \begin{align}
 z = \mu_{\phi}(x) + \sigma_{\phi}(x) \odot \epsilon
 \end{align}
+$$
 
 where $\odot$ denotes element-wise multiplication.
 
