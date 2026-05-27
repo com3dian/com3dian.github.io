@@ -83,7 +83,7 @@ For convenience of later derivations, we list the required notations below.
 - $z_t \sim \mathcal{N}(0, I)$: injected noise  
 - $n$: timestep index for score updates  
 
-# Variational AutoEncoders {#sec:VAE}
+# Variational AutoEncoders
 
 In this section, we discuss the foundations of diffusion models, along with key aspects of their implementation, including the learning objective and how it is derived. Due to page limitations, some topics—such as text guidance—are not covered.
 
@@ -91,7 +91,8 @@ As discussed earlier, one common approach to generative modeling is to learn a t
 
 In general, this transformation is not available in closed form. Instead, it can be learned by defining a trainable objective (i.e., a loss function) that measures the difference between the model distribution $p_{\theta}(x)$ and the data distribution $p_{\text{data}}(x)$, and optimizing it using a neural network. The optimal parameters then define a model that approximates the target distribution. In this way, the problem of generating data is reduced to defining and solving an optimization problem.
 
-> **Assumption 1** {#ass:regular-transform}  
+<a id="ass:regular-transform" />
+> **Assumption 1**  
 > There exists a sufficiently regular transformation from $p(z)$ to $p_{\text{data}}(x)$ that can be approximated by a neural network.
 
 Assumption [1](#ass:regular-transform) ensures that the model has enough expressive power to represent the target distribution. This assumption is nontrivial, since not every pair of distributions can be related through such a transformation in a well-behaved manner. For example, when the target distribution is singular (such as a Dirac delta distribution) while the model distribution is continuous (such as a Gaussian), the Kullback--Leibler divergence can become infinite, indicating a fundamental mismatch between the two distributions. In such cases, directly approximating the target distribution can be challenging.
