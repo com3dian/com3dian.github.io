@@ -24,7 +24,7 @@ export default function PostLayout({ content, toc, next, prev, children }: Layou
     <SectionContainer>
       <ScrollTopAndComment />
       <article>
-        <header className="pt-6 pb-8">
+        <header className="pt-6 pb-4">
           <time dateTime={date} className="text-sm text-gray-500 dark:text-gray-400">
             {formatDate(date, siteMetadata.locale)}
           </time>

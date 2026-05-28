@@ -47,7 +47,7 @@ export default function PostLayout({
       <ScrollTopAndComment />
       <article>
         <div>
-          <header className="pt-6 xl:pb-6">
+          <header className="pt-6">
             <div className="space-y-1 text-center">
               <dl className="space-y-10">
                 <div>
@@ -63,14 +63,14 @@ export default function PostLayout({
                 <PageTitle>{title}</PageTitle>
               </div>
               {toc && (
-                <div className="mt-12 text-left sm:mt-32">
+                <div className="mt-12 text-left sm:mt-16">
                   <CollapsibleTOC toc={toc} />
                 </div>
               )}
             </div>
           </header>
           <div className="grid-rows-[auto_1fr] pb-8 xl:grid xl:grid-cols-4 xl:gap-x-6">
-            <dl className="pt-6 pb-10 xl:pt-11">
+            <dl className="pt-3 pb-4 xl:pt-4">
               <dt className="sr-only">Authors</dt>
               <dd>
                 <ul className="flex flex-wrap justify-center gap-4 sm:space-x-12 xl:block xl:space-y-8 xl:space-x-0">
@@ -108,7 +108,7 @@ export default function PostLayout({
               </dd>
             </dl>
             <div className="xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose dark:prose-invert max-w-none pt-4 pb-8">{children}</div>
+              <div className="prose dark:prose-invert max-w-none pb-8">{children}</div>
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
                 <Link href={discussUrl(path)} rel="nofollow">
                   Discuss on Twitter
