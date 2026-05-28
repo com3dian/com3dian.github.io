@@ -176,3 +176,462 @@ $$
 where $\odot$ denotes element-wise multiplication.
 
 After training, the VAE consists of an encoder $q_\phi(z \mid x)$ and a decoder $p_\theta(x \mid z)$. To generate new data, we first sample a latent variable $z$ from the prior distribution $\mathcal{N}(0, I)$ and then pass it through the decoder $p_\theta(x \mid z)$. In the generation process, only the decoder is used to produce samples, while the encoder is introduced during training to establish the relationship between the data space and the latent space.
+
+# Denoising Diffusion Probabilistic Models (DDPM)
+
+Previously, we saw that in variational autoencoders (VAEs), the transformation from a known prior distribution to the data distribution is learned implicitly through an encoder–decoder pair. A limitation of this approach is that the relationship between data and latent variables is only captured through an approximate posterior, which introduces additional modeling and inference complexity.
+
+An alternative approach is to construct a stepwise transformation from the data distribution to a Gaussian distribution. Intuitively, this can be understood as forming a linear combination of the original data and Gaussian noise. Over time, the contribution of the noise gradually increases while the contribution of the data decreases, eventually resulting in pure Gaussian noise.
+
+Equivalently, this process can be defined as a stepwise Markov chain. For convenience, we introduce the following notation:
+
+* $x_0$: original data sample
+* $x_T$: latent variable at the final timestep (standard Gaussian noise)
+* $x_t$: intermediate latent state at timestep $t$
+
+where $t \in {0, \dots, T}$.
+
+Under this notation, the **forward process** is defined as
+
+$$
+x_t = \sqrt{\alpha_t} , x_{t-1}
+
+* \sqrt{1 - \alpha_t},\epsilon_t,
+  \qquad
+  \epsilon_t \sim \mathcal{N}(0,I).
+  $$
+
+By recursively applying this relation, we can express $x_t$ in terms of the original data $x_0$. For example,
+
+$$
+\begin{aligned}
+x_t
+&=
+\sqrt{\alpha_t}
+\left(
+\sqrt{\alpha_{t-1}}x_{t-2}
++
+\sqrt{1-\alpha_{t-1}}\epsilon_{t-1}
+\right)
++
+\sqrt{1-\alpha_t}\epsilon_t \
+&=
+\sqrt{\alpha_t\alpha_{t-1}},x_{t-2}
++
+\sqrt{\alpha_t(1-\alpha_{t-1})},\epsilon_{t-1}
++
+\sqrt{1-\alpha_t},\epsilon_t.
+\end{aligned}
+$$
+
+Continuing this expansion yields a weighted sum of independent Gaussian noises. Since a linear combination of independent Gaussian random variables is still Gaussian, we can merge the noise terms into a single Gaussian random variable $\epsilon \sim \mathcal{N}(0,I)$.
+
+The merged variance is
+
+$$
+\sigma^2
+========
+
+\alpha_t(1-\alpha_{t-1})
++
+(1-\alpha_t)
+============
+
+1-\alpha_t\alpha_{t-1}.
+$$
+
+Repeating this process until $t=0$ yields the closed-form expression
+
+$$
+x_t
+===
+
+\sqrt{\bar{\alpha}_t},x_0
++
+\sqrt{1-\bar{\alpha}_t},\epsilon,
+$$
+
+where
+
+$$
+\bar{\alpha}_t
+==============
+
+\prod_{s=1}^{t}\alpha_s,
+\qquad
+\epsilon \sim \mathcal{N}(0,I).
+$$
+
+This formulation shows that the forward process gradually destroys the structure of the data, and after sufficiently many steps, the distribution of $x_T$ approaches a standard Gaussian distribution.
+
+## Formulation of the Diffusion Process
+
+We now summarize the diffusion process more formally.
+
+To make the stepwise noising process meaningful, we assume that the transformation from the data distribution to a Gaussian distribution can be approximated through a sequence of small stochastic transitions. This assumption differs from Assumption 1, since the forward diffusion process is explicitly defined rather than learned by a neural network.
+
+Several important assumptions and design choices are made in this formulation:
+
+1. **Markov Property**
+
+   The forward process is assumed to satisfy the Markov property, meaning each state depends only on the previous state. This allows the joint distribution of the trajectory to be written as
+
+   $$
+   q(x_{1:T}\mid x_0)
+   ==================
+
+   \prod_{t=1}^{T}
+   q(x_t\mid x_{t-1}).
+   $$
+
+2. **Gaussian Transitions**
+
+   Each transition is modeled as a Gaussian distribution, which enables the forward process to admit the closed-form expression derived above.
+
+3. **Variance-Preserving Process**
+
+   The coefficients are chosen such that the overall scale of the samples remains stable throughout the diffusion process, preventing the signal from growing or shrinking uncontrollably.
+
+4. **Gaussian Terminal Distribution**
+
+   After sufficiently many diffusion steps, the final state $x_T$ approaches a standard Gaussian distribution.
+
+If we could reverse this process and iteratively sample from the reverse conditional distribution $q(x_{t-1}\mid x_t)$, we would be able to generate samples from the data distribution starting from Gaussian noise.
+
+However, this reverse conditional is generally intractable to compute directly. Therefore, diffusion models instead learn a parameterized model
+
+$$
+p_\theta(x_{t-1}\mid x_t)
+$$
+
+to approximate the reverse diffusion process.
+
+## ELBO in Diffusion Models
+
+We now have all the necessary components to formulate the diffusion model objective.
+
+Unlike VAEs, the forward process $q(x_t \mid x_{t-1})$ is no longer parameterized by $\phi$, but is instead explicitly defined as a fixed stochastic process. As a result, the learning problem focuses only on the **reverse process** $p_\theta(x_{t-1}\mid x_t)$, which serves as the generative component of the model.
+
+Similar to the VAE formulation, we can derive a variational lower bound (ELBO) for the log-likelihood objective. The detailed derivation and intermediate steps are provided in the appendix.
+
+$$
+\begin{aligned}
+\log p(x_0)
+&\ge
+\mathbb{E}*{q(x*{1:T}\mid x_0)}
+\left[
+\log
+\frac{
+p(x_{0:T})
+}{
+q(x_{1:T}\mid x_0)
+}
+\right] \
+&=
+\mathbb{E}*{q(x*{1:T}\mid x_0)}
+\left[
+\log
+\frac{
+p(x_T)
+\prod_{t=1}^{T}
+p_\theta(x_{t-1}\mid x_t)
+}{
+\prod_{t=1}^{T}
+q(x_t\mid x_{t-1})
+}
+\right].
+\end{aligned}
+$$
+
+After a sequence of algebraic manipulations, the ELBO can be written as
+
+$$
+\begin{aligned}
+&
+\mathbb{E}*{q(x_1\mid x_0)}
+\log p*\theta(x_0\mid x_1)
+\
+&-
+D_{KL}
+\left(
+q(x_T\mid x_0)
+\parallel
+p(x_T)
+\right)
+\
+&-
+\sum_{t=2}^{T}
+\mathbb{E}*{q(x_t\mid x_0)}
+D*{KL}
+\left(
+q(x_{t-1}\mid x_t,x_0)
+\parallel
+p_\theta(x_{t-1}\mid x_t)
+\right).
+\end{aligned}
+$$
+
+The terms in the above expression can be interpreted as follows:
+
+1. **Reconstruction term**
+
+   $$
+   \mathbb{E}*{q(x_1\mid x_0)}
+   \log p*\theta(x_0\mid x_1)
+   $$
+
+   measures how well the model can recover the original data from a slightly noisy sample, analogous to the reconstruction objective in VAEs.
+
+2. **Prior matching term**
+
+   $$
+   D_{KL}
+   \left(
+   q(x_T\mid x_0)
+   \parallel
+   p(x_T)
+   \right)
+   $$
+
+   measures how close the final distribution of the forward diffusion process is to a standard Gaussian distribution. By construction, and for sufficiently large $T$, this term is effectively constant during training.
+
+3. **Denoising matching term**
+
+   $$
+   \mathbb{E}*{q(x_t\mid x_0)}
+   D*{KL}
+   \left(
+   q(x_{t-1}\mid x_t,x_0)
+   \parallel
+   p_\theta(x_{t-1}\mid x_t)
+   \right)
+   $$
+
+   trains the reverse process to approximate the true reverse posterior.
+
+The reverse posterior is Gaussian and can be written as
+
+$$
+q(x_{t-1}\mid x_t,x_0)
+======================
+
+\mathcal{N}
+\left(
+x_{t-1};
+\mu_q(x_t,x_0),
+\Sigma_q(t)
+\right),
+$$
+
+where
+
+$$
+\mu_q(x_t,x_0)
+==============
+
+\frac{
+\sqrt{\alpha_t}(1-\bar{\alpha}*{t-1})x_t
++
+\sqrt{\bar{\alpha}*{t-1}}(1-\alpha_t)x_0
+}{
+1-\bar{\alpha}_t
+}
+$$
+
+and
+
+$$
+\Sigma_q(t)
+===========
+
+\frac{
+(1-\alpha_t)(1-\bar{\alpha}_{t-1})
+}{
+1-\bar{\alpha}_t
+}
+I.
+$$
+
+## Training the Diffusion Model and Sampling
+
+Recall that the KL divergence between two Gaussian distributions simplifies considerably when their covariance matrices are fixed to be equal.
+
+In that case, minimizing
+
+$$
+D_{KL}
+\left(
+q(x_{t-1}\mid x_t,x_0)
+\parallel
+p_\theta(x_{t-1}\mid x_t)
+\right)
+$$
+
+is equivalent to minimizing the squared error between their means:
+
+$$
+\arg\min_\theta
+\left|
+\mu_\theta(x_t,t)
+-----------------
+
+\mu_q(x_t,x_0)
+\right|_2^2.
+$$
+
+Using the forward-process relation
+
+$$
+x_t
+===
+
+\sqrt{\bar{\alpha}_t}x_0
++
+\sqrt{1-\bar{\alpha}_t}\epsilon,
+$$
+
+we can solve for $x_0$:
+
+$$
+x_0
+===
+
+\frac{
+x_t
+---
+
+\sqrt{1-\bar{\alpha}_t},\epsilon
+}{
+\sqrt{\bar{\alpha}_t}
+}.
+$$
+
+Substituting this into the posterior mean yields
+
+$$
+\mu_q(x_t,x_0)
+==============
+
+\frac{1}{\sqrt{\alpha_t}}
+\left(
+x_t
+---
+
+\frac{1-\alpha_t}
+{\sqrt{1-\bar{\alpha}_t}}
+\epsilon
+\right).
+$$
+
+This suggests that, instead of directly predicting the posterior mean, we can train a neural network
+
+$$
+\hat{\epsilon}_\theta(x_t,t)
+$$
+
+to predict the noise added at timestep $t$.
+
+The resulting optimization objective becomes
+
+$$
+\arg\min_\theta
+\mathbb{E}_{x_0,\epsilon,t}
+\left[
+\lambda(t)
+\left|
+\epsilon
+--------
+
+\hat{\epsilon}_\theta
+\left(
+\sqrt{\bar{\alpha}_t}x_0
++
+\sqrt{1-\bar{\alpha}_t}\epsilon,
+t
+\right)
+\right|_2^2
+\right].
+$$
+
+Here $\lambda(t)$ denotes the weighting term induced by the KL divergence.
+
+In the simplified DDPM objective, $\lambda(t)$ is commonly set to $1$, which empirically leads to improved sample quality.
+
+In practice, the reconstruction term is also absorbed into the simplified denoising objective. Consequently, training is dominated by the noise-prediction loss, which teaches the model to estimate the Gaussian noise added at each diffusion timestep.
+
+### Training Algorithm
+
+```text
+repeat
+    x₀ ~ q(x₀)
+    t ~ Uniform({1, ..., T})
+    ε ~ N(0, I)
+
+    x_t = √ᾱ_t x₀ + √(1-ᾱ_t) ε
+
+    Update θ using:
+        || ε - ε̂_θ(x_t, t) ||²
+until converged
+```
+
+### Sampling Algorithm
+
+```text
+x_T ~ N(0, I)
+
+for t = T, ..., 1
+    z ~ N(0, I) if t > 1 else 0
+
+    x_{t-1} =
+        1/√α_t (
+            x_t
+            - (1-α_t)/√(1-ᾱ_t) · ε̂_θ(x_t,t)
+        )
+        + σ_t z
+end
+
+return x₀
+```
+
+In reverse sampling, $\sigma_t$ is a tunable hyperparameter that controls how much random noise is injected at each timestep.
+
+The overall training procedure of diffusion models can now be summarized as follows.
+
+During training, we first sample a real data point $x_0$ from the dataset and randomly choose a timestep $t \in {1,\dots,T}$. Gaussian noise is then added according to
+
+$$
+x_t
+===
+
+\sqrt{\bar{\alpha}_t}x_0
++
+\sqrt{1-\bar{\alpha}_t}\epsilon.
+$$
+
+The noisy sample $x_t$, together with the timestep $t$, is passed into the neural network $\hat{\epsilon}_\theta(x_t,t)$, which is trained to predict the noise $\epsilon$ that was added to the original data.
+
+Because the timestep is sampled uniformly during training, the model learns to denoise samples across a wide range of noise levels.
+
+After training, generation proceeds through the reverse diffusion process. We first sample
+
+$$
+x_T \sim \mathcal{N}(0,I),
+$$
+
+which corresponds to pure Gaussian noise.
+
+The learned model then iteratively predicts and removes noise from the sample:
+
+$$
+x_T
+\rightarrow
+x_{T-1}
+\rightarrow
+\cdots
+\rightarrow
+x_1
+\rightarrow
+x_0.
+$$
+
+At each timestep, the model predicts the noise component in the current sample and uses it to estimate a less noisy sample from the previous timestep. After sufficiently many reverse steps, the final sample $x_0$ approximately follows the data distribution, producing a generated image.
