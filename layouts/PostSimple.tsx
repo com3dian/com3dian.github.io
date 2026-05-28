@@ -31,7 +31,11 @@ export default function PostLayout({ content, toc, next, prev, children }: Layou
           <div className="mt-3">
             <PageTitle>{title}</PageTitle>
           </div>
-          {toc && <CollapsibleTOC toc={toc} />}
+          {toc && (
+            <div className="mt-12 sm:mt-16">
+              <CollapsibleTOC toc={toc} />
+            </div>
+          )}
         </header>
         <div className="prose dark:prose-invert max-w-none pb-8">{children}</div>
         <footer className="space-y-6 pt-8 text-sm">
