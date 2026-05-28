@@ -32,7 +32,7 @@ export default function PostLayout({ content, toc, next, prev, children }: Layou
             <PageTitle>{title}</PageTitle>
           </div>
           {toc && (
-            <div className="mt-12 sm:mt-16">
+            <div className="mt-6 sm:mt-8">
               <CollapsibleTOC toc={toc} />
             </div>
           )}
