@@ -195,11 +195,10 @@ Under this notation, the **forward process** is defined as
 
 $$
 x_t = \sqrt{\alpha_t} , x_{t-1}
-
-* \sqrt{1 - \alpha_t},\epsilon_t,
-  \qquad
-  \epsilon_t \sim \mathcal{N}(0,I).
-  $$
++ \sqrt{1 - \alpha_t},\epsilon_t,
+\qquad
+\epsilon_t \sim \mathcal{N}(0,I).
+$$
 
 By recursively applying this relation, we can express $x_t$ in terms of the original data $x_0$. For example,
 
@@ -214,7 +213,7 @@ x_t
 \sqrt{1-\alpha_{t-1}}\epsilon_{t-1}
 \right)
 +
-\sqrt{1-\alpha_t}\epsilon_t \
+\sqrt{1-\alpha_t}\epsilon_t \\
 &=
 \sqrt{\alpha_t\alpha_{t-1}},x_{t-2}
 +
@@ -230,13 +229,11 @@ The merged variance is
 
 $$
 \sigma^2
-========
-
+=
 \alpha_t(1-\alpha_{t-1})
 +
 (1-\alpha_t)
-============
-
+=
 1-\alpha_t\alpha_{t-1}.
 $$
 
@@ -244,8 +241,7 @@ Repeating this process until $t=0$ yields the closed-form expression
 
 $$
 x_t
-===
-
+=
 \sqrt{\bar{\alpha}_t},x_0
 +
 \sqrt{1-\bar{\alpha}_t},\epsilon,
@@ -255,8 +251,7 @@ where
 
 $$
 \bar{\alpha}_t
-==============
-
+=
 \prod_{s=1}^{t}\alpha_s,
 \qquad
 \epsilon \sim \mathcal{N}(0,I).
@@ -278,8 +273,7 @@ Several important assumptions and design choices are made in this formulation:
 
    $$
    q(x_{1:T}\mid x_0)
-   ==================
-
+   =
    \prod_{t=1}^{T}
    q(x_t\mid x_{t-1}).
    $$
@@ -318,7 +312,7 @@ $$
 \begin{aligned}
 \log p(x_0)
 &\ge
-\mathbb{E}*{q(x*{1:T}\mid x_0)}
+\mathbb{E}_{q(x_{1:T}\mid x_0)}
 \left[
 \log
 \frac{
@@ -326,9 +320,9 @@ p(x_{0:T})
 }{
 q(x_{1:T}\mid x_0)
 }
-\right] \
+\right] \\
 &=
-\mathbb{E}*{q(x*{1:T}\mid x_0)}
+\mathbb{E}_{q(x_{1:T}\mid x_0)}
 \left[
 \log
 \frac{
@@ -348,9 +342,9 @@ After a sequence of algebraic manipulations, the ELBO can be written as
 $$
 \begin{aligned}
 &
-\mathbb{E}*{q(x_1\mid x_0)}
-\log p*\theta(x_0\mid x_1)
-\
+\mathbb{E}_{q(x_1\mid x_0)}
+\log p_\theta(x_0\mid x_1)
+\\
 &-
 D_{KL}
 \left(
@@ -358,11 +352,11 @@ q(x_T\mid x_0)
 \parallel
 p(x_T)
 \right)
-\
+\\
 &-
 \sum_{t=2}^{T}
-\mathbb{E}*{q(x_t\mid x_0)}
-D*{KL}
+\mathbb{E}_{q(x_t\mid x_0)}
+D_{KL}
 \left(
 q(x_{t-1}\mid x_t,x_0)
 \parallel
@@ -376,8 +370,8 @@ The terms in the above expression can be interpreted as follows:
 1. **Reconstruction term**
 
    $$
-   \mathbb{E}*{q(x_1\mid x_0)}
-   \log p*\theta(x_0\mid x_1)
+   \mathbb{E}_{q(x_1\mid x_0)}
+   \log p_\theta(x_0\mid x_1)
    $$
 
    measures how well the model can recover the original data from a slightly noisy sample, analogous to the reconstruction objective in VAEs.
@@ -398,8 +392,8 @@ The terms in the above expression can be interpreted as follows:
 3. **Denoising matching term**
 
    $$
-   \mathbb{E}*{q(x_t\mid x_0)}
-   D*{KL}
+   \mathbb{E}_{q(x_t\mid x_0)}
+   D_{KL}
    \left(
    q(x_{t-1}\mid x_t,x_0)
    \parallel
@@ -413,8 +407,7 @@ The reverse posterior is Gaussian and can be written as
 
 $$
 q(x_{t-1}\mid x_t,x_0)
-======================
-
+=
 \mathcal{N}
 \left(
 x_{t-1};
@@ -427,29 +420,26 @@ where
 
 $$
 \mu_q(x_t,x_0)
-==============
-
+=
 \frac{
-\sqrt{\alpha_t}(1-\bar{\alpha}*{t-1})x_t
+\sqrt{\alpha_t}(1-\bar{\alpha}_{t-1})x_t
 +
-\sqrt{\bar{\alpha}*{t-1}}(1-\alpha_t)x_0
+\sqrt{\bar{\alpha}_{t-1}}(1-\alpha_t)x_0
 }{
 1-\bar{\alpha}_t
-}
+}.
 $$
 
 and
 
 $$
 \Sigma_q(t)
-===========
-
+=
 \frac{
 (1-\alpha_t)(1-\bar{\alpha}_{t-1})
 }{
 1-\bar{\alpha}_t
-}
-I.
+}.
 $$
 
 ## Training the Diffusion Model and Sampling
@@ -471,20 +461,18 @@ is equivalent to minimizing the squared error between their means:
 
 $$
 \arg\min_\theta
-\left|
+\left\|
 \mu_\theta(x_t,t)
------------------
-
+-
 \mu_q(x_t,x_0)
-\right|_2^2.
+\right\|_2^2.
 $$
 
 Using the forward-process relation
 
 $$
 x_t
-===
-
+=
 \sqrt{\bar{\alpha}_t}x_0
 +
 \sqrt{1-\bar{\alpha}_t}\epsilon,
@@ -494,12 +482,10 @@ we can solve for $x_0$:
 
 $$
 x_0
-===
-
+=
 \frac{
 x_t
----
-
+-
 \sqrt{1-\bar{\alpha}_t},\epsilon
 }{
 \sqrt{\bar{\alpha}_t}
@@ -510,13 +496,11 @@ Substituting this into the posterior mean yields
 
 $$
 \mu_q(x_t,x_0)
-==============
-
+=
 \frac{1}{\sqrt{\alpha_t}}
 \left(
 x_t
----
-
+-
 \frac{1-\alpha_t}
 {\sqrt{1-\bar{\alpha}_t}}
 \epsilon
@@ -538,10 +522,9 @@ $$
 \mathbb{E}_{x_0,\epsilon,t}
 \left[
 \lambda(t)
-\left|
+\left\|
 \epsilon
---------
-
+-
 \hat{\epsilon}_\theta
 \left(
 \sqrt{\bar{\alpha}_t}x_0
@@ -549,7 +532,7 @@ $$
 \sqrt{1-\bar{\alpha}_t}\epsilon,
 t
 \right)
-\right|_2^2
+\right\|_2^2
 \right].
 $$
 
@@ -601,8 +584,7 @@ During training, we first sample a real data point $x_0$ from the dataset and ra
 
 $$
 x_t
-===
-
+=
 \sqrt{\bar{\alpha}_t}x_0
 +
 \sqrt{1-\bar{\alpha}_t}\epsilon.
