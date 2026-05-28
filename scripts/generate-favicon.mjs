@@ -4,7 +4,7 @@ import { join } from 'path'
 
 const root = process.cwd()
 const faviconsDir = join(root, 'public/static/favicons')
-const emojiCodepoint = '1f596' // 🖖 Vulcan salute
+const emojiCodepoint = '1fab7' // 🪷 lotus
 const twemojiUrl = `https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/${emojiCodepoint}.png`
 
 mkdirSync(faviconsDir, { recursive: true })
