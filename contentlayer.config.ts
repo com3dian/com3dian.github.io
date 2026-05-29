@@ -12,8 +12,8 @@ import {
   remarkExtractFrontmatter,
   remarkCodeTitles,
   remarkImgToJsx,
-  extractTocHeadings,
 } from 'pliny/mdx-plugins/index.js'
+import { extractTocHeadings } from './lib/extract-toc-headings'
 // Rehype packages
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'

@@ -6,7 +6,8 @@ draft: false
 summary: 'Notes on diffusion models.'
 authors: ['default']
 ---
-> *Acknowledgement: I am deeply grateful to my friends and colleagues who helped review this manuscript, namely [Thijs van der Plas](https://vdplasthijs.github.io/), [Jiahao Zhang](https://www.linkedin.com/in/jiahao-zhang-b73b71110/), [Wenbo Jing](https://scholars.cityu.edu.hk/en/persons/wenbjing/), and [Yingjie Shao](https://research.wur.nl/en/persons/yingjie-shao/).*
+
+> _Acknowledgement: I am deeply grateful to my friends and colleagues who helped review this manuscript, namely [Thijs van der Plas](https://vdplasthijs.github.io/), [Jiahao Zhang](https://www.linkedin.com/in/jiahao-zhang-b73b71110/), [Wenbo Jing](https://scholars.cityu.edu.hk/en/persons/wenbjing/), and [Yingjie Shao](https://research.wur.nl/en/persons/yingjie-shao/)._
 
 Generative diffusion models reframe sample generation as an iterative denoising process: starting from pure Gaussian noise, they learn to reverse a carefully designed forward diffusion that gradually corrupts data.
 
@@ -23,6 +24,7 @@ Intuitively, one might consider a Monte Carlo approach in which samples are draw
 The following sections introduce diffusion models and their related methods. We first review the ELBO derivation through VAEs (Section VAE), then derive DDPM (Section DDPM) and DDIM (Section DDIM). Finally, we discuss connections to score-based models (Section Score).
 
 When writing this essay, I also read and learned a lot from several blog posts, including:
+
 - [Luo (2022): Understanding Diffusion Models: A Unified Perspective](https://arxiv.org/abs/2208.11970)
 - [Lai (2025): Principles of Diffusion Models](https://arxiv.org/abs/2510.21890)
 - [Weng (2021): Diffusion Models Blog](lilianweng.github.io/posts/2021-07-11-diffusion-models/)
@@ -35,53 +37,60 @@ When writing this essay, I also read and learned a lot from several blog posts, 
 For convenience of later derivations, we list the required notations below.
 
 **Data and distributions**
-- $x$, $x_0$: data point drawn from the target distribution  
-- $p_{\text{data}}(x)$: unknown target distribution we want to sample from  
-- $p_\theta(x)$: learned model distribution parameterized by $\theta$  
-- $z$: latent variable drawn from a simple prior  
-- $p(z)$: prior distribution, usually $\mathcal{N}(0, I)$  
-- $p(x, z)$: joint distribution of $x$ and $z$  
-- $p(x \mid z)$: conditional distribution of data given latent variable  
+
+- $x$, $x_0$: data point drawn from the target distribution
+- $p_{\text{data}}(x)$: unknown target distribution we want to sample from
+- $p_\theta(x)$: learned model distribution parameterized by $\theta$
+- $z$: latent variable drawn from a simple prior
+- $p(z)$: prior distribution, usually $\mathcal{N}(0, I)$
+- $p(x, z)$: joint distribution of $x$ and $z$
+- $p(x \mid z)$: conditional distribution of data given latent variable
 
 **Variational Inference (VAE)**
-- $\phi, \theta$: encoder and decoder parameters  
-- $q_\phi(z \mid x)$: approximate posterior (encoder)  
-- $p_\theta(x \mid z)$: decoder / likelihood  
-- $\mu_\phi(x), \sigma_\phi^2(x)$: encoder outputs  
+
+- $\phi, \theta$: encoder and decoder parameters
+- $q_\phi(z \mid x)$: approximate posterior (encoder)
+- $p_\theta(x \mid z)$: decoder / likelihood
+- $\mu_\phi(x), \sigma_\phi^2(x)$: encoder outputs
 
 **Distributions and metrics**
-- $\mathcal{N}(\mu, \Sigma)$: Gaussian distribution  
-- $D_{KL}(P \parallel Q)$: KL divergence  
-- $\mathbb{E}_q[\cdot]$: expectation under $q$  
+
+- $\mathcal{N}(\mu, \Sigma)$: Gaussian distribution
+- $D_{KL}(P \parallel Q)$: KL divergence
+- $\mathbb{E}_q[\cdot]$: expectation under $q$
 
 **DDPM & diffusion process**
-- $t$: timestep in $\{1, \dots, T\}$  
-- $x_t$: latent variable at timestep $t$  
-- $\alpha_t$: noise schedule coefficient  
-- $\bar{\alpha}_t = \prod_{s=1}^t \alpha_s$  
-- $\epsilon_t \sim \mathcal{N}(0, I)$: Gaussian noise  
-- $q(x_t \mid x_{t-1})$: forward process  
-- $p_\theta(x_{t-1} \mid x_t)$: learned reverse process  
-- $\hat{\epsilon}_\theta(x_t, t)$: noise prediction network  
-- $\mu_\theta(x_t, t)$: predicted reverse mean  
+
+- $t$: timestep in $\{1, \dots, T\}$
+- $x_t$: latent variable at timestep $t$
+- $\alpha_t$: noise schedule coefficient
+- $\bar{\alpha}_t = \prod_{s=1}^t \alpha_s$
+- $\epsilon_t \sim \mathcal{N}(0, I)$: Gaussian noise
+- $q(x_t \mid x_{t-1})$: forward process
+- $p_\theta(x_{t-1} \mid x_t)$: learned reverse process
+- $\hat{\epsilon}_\theta(x_t, t)$: noise prediction network
+- $\mu_\theta(x_t, t)$: predicted reverse mean
 
 **DDIM**
-- $\sigma_t$: stochasticity parameter  
-- $S$: number of sampling steps  
-- $\tau$: subset of timesteps  
-- $q_\sigma$: DDIM sampling distribution  
+
+- $\sigma_t$: stochasticity parameter
+- $S$: number of sampling steps
+- $\tau$: subset of timesteps
+- $q_\sigma$: DDIM sampling distribution
 
 **Score-based models**
-- $\nabla_x \log p(x)$: score function  
-- $s_\theta(x, t)$: learned score network  
-- $\eta_t$: noise scale  
-- $p_t(x_t)$: noisy marginal distribution  
-- $\lambda(t)$: weighting function  
+
+- $\nabla_x \log p(x)$: score function
+- $s_\theta(x, t)$: learned score network
+- $\eta_t$: noise scale
+- $p_t(x_t)$: noisy marginal distribution
+- $\lambda(t)$: weighting function
 
 **Langevin dynamics**
-- $\gamma$: step size  
-- $z_t \sim \mathcal{N}(0, I)$: injected noise  
-- $n$: timestep index for score updates  
+
+- $\gamma$: step size
+- $z_t \sim \mathcal{N}(0, I)$: injected noise
+- $n$: timestep index for score updates
 
 # Variational AutoEncoders
 
@@ -111,13 +120,13 @@ Consider log likelihood:
 
 $$
 \begin{align}
-\log p(x) 
+\log p(x)
 &= \log p(x) \int q_{\phi}(z \mid x)\, dz \\
 &= \int \log p(x)\, q_{\phi}(z \mid x)\, dz \\
 &= \mathbb{E}_{q_{\phi}(z \mid x)} \left[ \log p(x) \right] \\
 &= \mathbb{E}_{q_{\phi}(z \mid x)} \left[ \log \frac{p(x, z)}{p(z \mid x)} \right] \\
-&= \mathbb{E}_{q_{\phi}(z \mid x)} \left[ 
-\log \frac{p(x, z)}{p(z \mid x)} \cdot \frac{q_{\phi}(z \mid x)}{q_{\phi}(z \mid x)}  
+&= \mathbb{E}_{q_{\phi}(z \mid x)} \left[
+\log \frac{p(x, z)}{p(z \mid x)} \cdot \frac{q_{\phi}(z \mid x)}{q_{\phi}(z \mid x)}
 \right] \\
 &= \mathbb{E}_{q_{\phi}(z \mid x)} \left[
 \log \frac{p(x, z)}{q_{\phi}(z \mid x)}
@@ -159,7 +168,7 @@ $$
 
 Therefore, the encoder is trained to predict the mean and variance of the latent variable $z$ given a data sample $x$.
 
-The reconstruction term in the ELBO can be approximated using Monte Carlo sampling with latent variables sampled from $q_{\phi}(z \mid x)$. However, the sampling operation itself is not differentiable, preventing gradients from being propagated through the network during backpropagation. To address this issue, we use the *reparameterization trick*. Instead of directly sampling from $\mathcal{N}(\mu_{\phi}(x), \sigma_{\phi}^{2}(x))$, we first sample
+The reconstruction term in the ELBO can be approximated using Monte Carlo sampling with latent variables sampled from $q_{\phi}(z \mid x)$. However, the sampling operation itself is not differentiable, preventing gradients from being propagated through the network during backpropagation. To address this issue, we use the _reparameterization trick_. Instead of directly sampling from $\mathcal{N}(\mu_{\phi}(x), \sigma_{\phi}^{2}(x))$, we first sample
 
 $$
 \epsilon \sim \mathcal{N}(0, I),
@@ -185,9 +194,9 @@ An alternative approach is to construct a stepwise transformation from the data 
 
 Equivalently, this process can be defined as a stepwise Markov chain. For convenience, we introduce the following notation:
 
-* $x_0$: original data sample
-* $x_T$: latent variable at the final timestep (standard Gaussian noise)
-* $x_t$: intermediate latent state at timestep $t$
+- $x_0$: original data sample
+- $x_T$: latent variable at the final timestep (standard Gaussian noise)
+- $x_t$: intermediate latent state at timestep $t$
 
 where $t \in {0, \dots, T}$.
 
@@ -293,12 +302,9 @@ Several important assumptions and design choices are made in this formulation:
 If we could reverse this process and iteratively sample from the reverse conditional distribution $q(x_{t-1}\mid x_t)$, we would be able to generate samples from the data distribution starting from Gaussian noise.
 
 However, this reverse conditional is generally intractable to compute directly. Therefore, diffusion models instead learn a parameterized model
-
-$$
+$
 p_\theta(x_{t-1}\mid x_t)
-$$
-
-to approximate the reverse diffusion process.
+$ to approximate the reverse diffusion process.
 
 ## ELBO in Diffusion Models
 
