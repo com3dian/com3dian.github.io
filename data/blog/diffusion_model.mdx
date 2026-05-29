@@ -508,11 +508,9 @@ x_t
 $$
 
 This suggests that, instead of directly predicting the posterior mean, we can train a neural network
-
-$$
+$
 \hat{\epsilon}_\theta(x_t,t)
-$$
-
+$
 to predict the noise added at timestep $t$.
 
 The resulting optimization objective becomes
@@ -595,12 +593,9 @@ The noisy sample $x_t$, together with the timestep $t$, is passed into the neura
 Because the timestep is sampled uniformly during training, the model learns to denoise samples across a wide range of noise levels.
 
 After training, generation proceeds through the reverse diffusion process. We first sample
-
-$$
+$
 x_T \sim \mathcal{N}(0,I),
-$$
-
-which corresponds to pure Gaussian noise.
+$ which corresponds to pure Gaussian noise.
 
 The learned model then iteratively predicts and removes noise from the sample:
 
