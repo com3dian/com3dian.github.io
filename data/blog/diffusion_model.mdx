@@ -664,7 +664,7 @@ $$
 x_{t-1} = f(x_t, t).
 $$
 
-From Equation (\ref{eq:gaussian}), we have the expression for $x_0$. After training a DDPM model, a neural network can be used to approximate the noise component $\epsilon_t$ with $\hat{\epsilon}_\theta(x_t,t)$. Therefore, both the original and estimated forms of $x_0$ can be written as
+From Equation (Eq. `eq:gaussian`), we have the expression for $x_0$. After training a DDPM model, a neural network can be used to approximate the noise component $\epsilon_t$ with $\hat{\epsilon}_\theta(x_t,t)$. Therefore, both the original and estimated forms of $x_0$ can be written as
 
 $$
 x_0
@@ -778,7 +778,7 @@ $$
 (1-\alpha_t),
 $$
 
-the sampling process reduces to the original DDPM formulation (Appendix \ref{app:ddim-ddpm-equiv}).
+the sampling process reduces to the original DDPM formulation (Appendix `app:ddim-ddpm-equiv`).
 
 During generation, it is not necessary to follow the entire sequence of timesteps $\{1,\dots,T\}$. Instead, we may sample using only a subset of timesteps. Let $m < n$ denote two timesteps in this trajectory. The DDIM reverse update step is then given by
 
