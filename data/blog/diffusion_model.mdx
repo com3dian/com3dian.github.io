@@ -135,6 +135,7 @@ $$
 &= \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log \frac{p(x, z)}{q_{\phi}(z \mid x)}\right] + D_{KL} (q_{\phi}(z \mid x) \lVert p(z \mid x)) \\
 &\geq \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log \frac{p(x, z)}{q_{\phi}(z \mid x)}\right]
 \end{align}
+\tag{1}
 $$
 
 The derivation shows that it can be expressed as the sum of a lower bound and a KL divergence term between the approximate posterior and the true posterior. Since the KL divergence is non-negative, the resulting expression provides a lower bound on $\log p_\theta(x)$, which is referred to as the Evidence Lower Bound (ELBO). The ELBO is used as the optimization objective in VAEs. This is motivated by two key reasons. First, it provides a tractable lower bound on the log-likelihood, and maximizing it indirectly improves the data likelihood. Second, it introduces a framework for learning a structured latent representation, where we explicitly model how data points are generated from latent variables. Although the exact KL term between the approximate posterior and the true posterior is intractable, maximizing the ELBO avoids computing it directly. Since $\log p_\theta(x)$ does not depend on $\phi$, maximizing the ELBO is equivalent to making the approximate posterior closer to the true posterior.
@@ -148,6 +149,7 @@ $$
 &= \mathbb{E}_{q_{\phi}(z \mid x)} \log p(x|z) + \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log\left(\frac{p(z)}{q_{\phi}(z \mid x)}\right)\right] \\
 &= \mathbb{E}_{q_{\phi}(z \mid x)} \left[\log p(x|z)\right] - D_{KL} (q_{\phi}(z \mid x) \lVert p(z))
 \end{align}
+\tag{2}
 $$
 
 The resulting expression consists of two terms. The first term corresponds to a reconstruction objective, which encourages accurate generation of data from latent variables. The second term is a KL divergence between the approximate posterior $q_\phi(z \mid x)$ and the prior $p(z)$, which regularizes the latent representation to stay close to a simple distribution.
@@ -164,6 +166,7 @@ q_{\phi}(z \mid x) = \mathcal{N}(\mu_{\phi}(x), \sigma_{\phi}^{2}(x)); \\
 \qquad \\
  p(z) = \mathcal{N}(0, I)
 \end{align}
+\tag{3}
 $$
 
 Therefore, the encoder is trained to predict the mean and variance of the latent variable $z$ given a data sample $x$.
@@ -172,6 +175,7 @@ The reconstruction term in the ELBO can be approximated using Monte Carlo sampli
 
 $$
 \epsilon \sim \mathcal{N}(0, I),
+\tag{4}
 $$
 
 and then compute
@@ -180,6 +184,7 @@ $$
 \begin{align}
 z = \mu_{\phi}(x) + \sigma_{\phi}(x) \odot \epsilon
 \end{align}
+\tag{5}
 $$
 
 where $\odot$ denotes element-wise multiplication.
@@ -207,6 +212,7 @@ x_t = \sqrt{\alpha_t} , x_{t-1}
 + \sqrt{1 - \alpha_t},\epsilon_t,
 \qquad
 \epsilon_t \sim \mathcal{N}(0,I).
+\tag{6}
 $$
 
 By recursively applying this relation, we can express $x_t$ in terms of the original data $x_0$. For example,
@@ -230,6 +236,7 @@ x_t
 +
 \sqrt{1-\alpha_t},\epsilon_t.
 \end{aligned}
+\tag{7}
 $$
 
 Continuing this expansion yields a weighted sum of independent Gaussian noises. Since a linear combination of independent Gaussian random variables is still Gaussian, we can merge the noise terms into a single Gaussian random variable $\epsilon \sim \mathcal{N}(0,I)$.
@@ -244,6 +251,7 @@ $$
 (1-\alpha_t)
 =
 1-\alpha_t\alpha_{t-1}.
+\tag{8}
 $$
 
 Repeating this process until $t=0$ yields the closed-form expression
@@ -254,6 +262,7 @@ x_t
 \sqrt{\bar{\alpha}_t},x_0
 +
 \sqrt{1-\bar{\alpha}_t},\epsilon,
+\tag{9}
 $$
 
 where
@@ -264,6 +273,7 @@ $$
 \prod_{s=1}^{t}\alpha_s,
 \qquad
 \epsilon \sim \mathcal{N}(0,I).
+\tag{10}
 $$
 
 This formulation shows that the forward process gradually destroys the structure of the data, and after sufficiently many steps, the distribution of $x_T$ approaches a standard Gaussian distribution.
@@ -285,6 +295,7 @@ Several important assumptions and design choices are made in this formulation:
    =
    \prod_{t=1}^{T}
    q(x_t\mid x_{t-1}).
+\tag{11}
    $$
 
 2. **Gaussian Transitions**
@@ -341,6 +352,7 @@ q(x_t\mid x_{t-1})
 }
 \right].
 \end{aligned}
+\tag{12}
 $$
 
 After a sequence of algebraic manipulations, the ELBO can be written as
@@ -369,6 +381,7 @@ q(x_{t-1}\mid x_t,x_0)
 p_\theta(x_{t-1}\mid x_t)
 \right).
 \end{aligned}
+\tag{13}
 $$
 
 The terms in the above expression can be interpreted as follows:
@@ -378,6 +391,7 @@ The terms in the above expression can be interpreted as follows:
    $$
    \mathbb{E}_{q(x_1\mid x_0)}
    \log p_\theta(x_0\mid x_1)
+\tag{14}
    $$
 
    measures how well the model can recover the original data from a slightly noisy sample, analogous to the reconstruction objective in VAEs.
@@ -391,6 +405,7 @@ The terms in the above expression can be interpreted as follows:
    \parallel
    p(x_T)
    \right)
+\tag{15}
    $$
 
    measures how close the final distribution of the forward diffusion process is to a standard Gaussian distribution. By construction, and for sufficiently large $T$, this term is effectively constant during training.
@@ -405,6 +420,7 @@ The terms in the above expression can be interpreted as follows:
    \parallel
    p_\theta(x_{t-1}\mid x_t)
    \right)
+\tag{16}
    $$
 
    trains the reverse process to approximate the true reverse posterior.
@@ -420,6 +436,7 @@ x_{t-1};
 \mu_q(x_t,x_0),
 \Sigma_q(t)
 \right),
+\tag{17}
 $$
 
 where
@@ -434,6 +451,7 @@ $$
 }{
 1-\bar{\alpha}_t
 }.
+\tag{18}
 $$
 
 and
@@ -446,6 +464,7 @@ $$
 }{
 1-\bar{\alpha}_t
 }.
+\tag{19}
 $$
 
 ## Training the Diffusion Model and Sampling
@@ -461,6 +480,7 @@ q(x_{t-1}\mid x_t,x_0)
 \parallel
 p_\theta(x_{t-1}\mid x_t)
 \right)
+\tag{20}
 $$
 
 is equivalent to minimizing the squared error between their means:
@@ -472,6 +492,7 @@ $$
 -
 \mu_q(x_t,x_0)
 \right\|_2^2.
+\tag{21}
 $$
 
 Using the forward-process relation
@@ -482,6 +503,7 @@ x_t
 \sqrt{\bar{\alpha}_t}x_0
 +
 \sqrt{1-\bar{\alpha}_t}\epsilon,
+\tag{22}
 $$
 
 we can solve for $x_0$:
@@ -496,6 +518,7 @@ x_t
 }{
 \sqrt{\bar{\alpha}_t}
 }.
+\tag{23}
 $$
 
 Substituting this into the posterior mean yields
@@ -511,6 +534,7 @@ x_t
 {\sqrt{1-\bar{\alpha}_t}}
 \epsilon
 \right).
+\tag{24}
 $$
 
 This suggests that, instead of directly predicting the posterior mean, we can train a neural network
@@ -538,6 +562,7 @@ t
 \right)
 \right\|_2^2
 \right].
+\tag{25}
 $$
 
 Here $\lambda(t)$ denotes the weighting term induced by the KL divergence.
@@ -592,6 +617,7 @@ x_t
 \sqrt{\bar{\alpha}_t}x_0
 +
 \sqrt{1-\bar{\alpha}_t}\epsilon.
+\tag{26}
 $$
 
 The noisy sample $x_t$, together with the timestep $t$, is passed into the neural network $\hat{\epsilon}_\theta(x_t,t)$, which is trained to predict the noise $\epsilon$ that was added to the original data.
@@ -615,6 +641,7 @@ x_{T-1}
 x_1
 \rightarrow
 x_0.
+\tag{27}
 $$
 
 At each timestep, the model predicts the noise component in the current sample and uses it to estimate a less noisy sample from the previous timestep. After sufficiently many reverse steps, the final sample $x_0$ approximately follows the data distribution, producing a generated image.
@@ -631,6 +658,7 @@ q(\mathbf{x}_t \mid \mathbf{x}_0)
 q(\mathbf{x}_{t-1} \mid \mathbf{x}_t, \mathbf{x}_0)
 \xrightarrow{\text{Approximation}}
 p_\theta(\mathbf{x}_{t-1} \mid \mathbf{x}_t).
+\tag{28}
 $$
 
 Although the derivation is constructed through a stepwise Markov process, the final formulation exhibits two important characteristics:
@@ -655,16 +683,18 @@ q(x_t \mid x_0)
 x_t;
 \sqrt{\bar{\alpha}_t}x_0,
 (1-\bar{\alpha}_t)I
-\right).
+\right)
+\tag{29}
 $$
 
 DDIM considers a non-Markovian forward process while preserving the same marginal distribution $q(x_t \mid x_0)$. The goal remains to generate $x_0$ starting from Gaussian noise $x_T$. Unlike DDPM, where each reverse step involves sampling from a probability distribution, DDIM introduces an implicit deterministic mapping
 
 $$
 x_{t-1} = f(x_t, t).
+\tag{30}
 $$
 
-From Equation (Eq. `eq:gaussian`), we have the expression for $x_0$. After training a DDPM model, a neural network can be used to approximate the noise component $\epsilon_t$ with $\hat{\epsilon}_\theta(x_t,t)$. Therefore, both the original and estimated forms of $x_0$ can be written as
+From Eq. (29), we have the expression for $x_0$. After training a DDPM model, a neural network can be used to approximate the noise component $\epsilon_t$ with $\hat{\epsilon}_\theta(x_t,t)$. Therefore, both the original and estimated forms of $x_0$ can be written as
 
 $$
 x_0
@@ -684,7 +714,8 @@ x_t
 -
 \sqrt{1-\bar{\alpha}_t}\,
 \hat{\epsilon}_\theta(x_t,t)
-\right).
+\right)
+\tag{31}
 $$
 
 Applying the diffusion relation again at timestep $t-1$ gives
@@ -695,6 +726,7 @@ x_{t-1}
 \sqrt{\bar{\alpha}_{t-1}}x_0
 +
 \sqrt{1-\bar{\alpha}_{t-1}}\epsilon_{t-1}.
+\tag{32}
 $$
 
 DDIM further decomposes the noise term into a deterministic component and a stochastic component:
@@ -708,11 +740,12 @@ x_{t-1}
 \,\hat{\epsilon}_\theta(x_t,t)
 +
 \sigma_t\epsilon,
+\tag{33}
 $$
 
 where $\epsilon \sim \mathcal{N}(0,I)$.
 
-Substituting the estimate of $x_0$ into this expression gives
+Substituting Eq. (31) into Eq. (33) gives
 
 $$
 x_{t-1}
@@ -733,9 +766,10 @@ x_t
 \,\hat{\epsilon}_\theta(x_t,t)
 +
 \sigma_t\epsilon.
+\tag{34}
 $$
 
-This defines the DDIM sampling process:
+Eq. (34) defines the DDIM sampling process:
 
 $$
 q_\sigma(x_{t-1} \mid x_t, x_0)
@@ -745,10 +779,11 @@ q_\sigma(x_{t-1} \mid x_t, x_0)
 x_{t-1};
 \mu_\sigma(x_t,x_0),
 \sigma_t^2 I
-\Bigr).
+\Bigr)
+\tag{35}
 $$
 
-where
+where the mean term in Eq. (35) is
 
 $$
 \mu_\sigma(x_t,x_0)
@@ -767,20 +802,22 @@ x_t
 +
 \sqrt{1-\bar{\alpha}_{t-1}-\sigma_t^2}
 \,\hat{\epsilon}_\theta(x_t,t).
+\tag{36}
 $$
 
-We can treat $\sigma_t^2$ as a hyperparameter that controls the stochasticity of the sampling process. When $\sigma_t^2 = 0$, the sampling process becomes fully deterministic. When
+We can treat $\sigma_t^2$ as a hyperparameter that controls the stochasticity of the sampling process in Eq. (35). When $\sigma_t^2 = 0$, the sampling process becomes fully deterministic. When
 
 $$
 \sigma_t^2
 =
 \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t}
 (1-\alpha_t),
+\tag{37}
 $$
 
-the sampling process reduces to the original DDPM formulation (Appendix `app:ddim-ddpm-equiv`).
+the sampling process in Eq. (35) reduces to the original DDPM formulation (Appendix `app:ddim-ddpm-equiv`).
 
-During generation, it is not necessary to follow the entire sequence of timesteps $\{1,\dots,T\}$. Instead, we may sample using only a subset of timesteps. Let $m < n$ denote two timesteps in this trajectory. The DDIM reverse update step is then given by
+During generation, it is not necessary to follow the entire sequence of timesteps $\{1,\dots,T\}$. Instead, we may sample using only a subset of timesteps. Let $m < n$ denote two timesteps in this trajectory. The DDIM reverse update step is then given by Eq. (38),
 
 $$
 q_{\sigma, m < n}
@@ -806,18 +843,20 @@ q_{\sigma, m < n}
 \hat{\epsilon}_\theta^{(n)}(\mathbf{x}_n, n),
 \,
 \sigma_n^2 \mathbf{I}
-\Bigg).
+\Bigg)
+\tag{38}
 $$
 
 This formulation gives DDIM two important advantages over DDPM:
 
 1. By controlling the parameter $\sigma_t$, the sampling process can interpolate between stochastic and deterministic generation.
 
-2. Since sampling does not need to follow the full sequence of timesteps, generation can be performed using only a subset
+2. Since sampling does not need to follow the full sequence of timesteps, generation can be performed using only a subset (Eq. (39))
 
 $$
 \tau = \{\tau_1,\dots,\tau_S\},
 \qquad S \ll T,
+\tag{39}
 $$
 
 which significantly reduces the computational cost while maintaining comparable sample quality.
