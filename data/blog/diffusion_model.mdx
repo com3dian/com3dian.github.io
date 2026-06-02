@@ -295,7 +295,7 @@ Several important assumptions and design choices are made in this formulation:
    =
    \prod_{t=1}^{T}
    q(x_t\mid x_{t-1}).
-\tag{11}
+   \tag{11}
    $$
 
 2. **Gaussian Transitions**
@@ -383,7 +383,7 @@ The terms in the above expression can be interpreted as follows:
    $$
    \mathbb{E}_{q(x_1\mid x_0)}
    \log p_\theta(x_0\mid x_1)
-\tag{14}
+   \tag{14}
    $$
 
    measures how well the model can recover the original data from a slightly noisy sample, analogous to the reconstruction objective in VAEs.
@@ -397,7 +397,7 @@ The terms in the above expression can be interpreted as follows:
    \parallel
    p(x_T)
    \right)
-\tag{15}
+   \tag{15}
    $$
 
    measures how close the final distribution of the forward diffusion process is to a standard Gaussian distribution. By construction, and for sufficiently large $T$, this term is effectively constant during training.
@@ -412,7 +412,7 @@ The terms in the above expression can be interpreted as follows:
    \parallel
    p_\theta(x_{t-1}\mid x_t)
    \right)
-\tag{16}
+   \tag{16}
    $$
 
    trains the reverse process to approximate the true reverse posterior.
