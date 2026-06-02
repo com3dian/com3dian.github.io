@@ -312,10 +312,7 @@ Several important assumptions and design choices are made in this formulation:
 
 If we could reverse this process and iteratively sample from the reverse conditional distribution $q(x_{t-1}\mid x_t)$, we would be able to generate samples from the data distribution starting from Gaussian noise.
 
-However, this reverse conditional is generally intractable to compute directly. Therefore, diffusion models instead learn a parameterized model
-$
-p_\theta(x_{t-1}\mid x_t)
-$ to approximate the reverse diffusion process.
+However, this reverse conditional is generally intractable to compute directly. Therefore, diffusion models instead learn a parameterized model $p_\theta(x_{t-1}\mid x_t)$ to approximate the reverse diffusion process.
 
 ## ELBO in Diffusion Models
 
@@ -536,11 +533,7 @@ x_t
 \tag{24}
 $$
 
-This suggests that, instead of directly predicting the posterior mean, we can train a neural network
-$
-\hat{\epsilon}_\theta(x_t,t)
-$
-to predict the noise added at timestep $t$.
+This suggests that, instead of directly predicting the posterior mean, we can train a neural network $\hat{\epsilon}_\theta(x_t,t)$ to predict the noise added at timestep $t$.
 
 The resulting optimization objective becomes
 
@@ -623,10 +616,7 @@ The noisy sample $x_t$, together with the timestep $t$, is passed into the neura
 
 Because the timestep is sampled uniformly during training, the model learns to denoise samples across a wide range of noise levels.
 
-After training, generation proceeds through the reverse diffusion process. We first sample
-$
-x_T \sim \mathcal{N}(0,I),
-$ which corresponds to pure Gaussian noise.
+After training, generation proceeds through the reverse diffusion process. We first sample $x_T \sim \mathcal{N}(0,I)$, which corresponds to pure Gaussian noise.
 
 The learned model then iteratively predicts and removes noise from the sample:
 
