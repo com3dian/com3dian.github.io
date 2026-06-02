@@ -291,7 +291,7 @@ Several important assumptions and design choices are made in this formulation:
    The forward process is assumed to satisfy the Markov property, meaning each state depends only on the previous state. This allows the joint distribution of the trajectory to be written as
 
    $$
-   q(x_{1,\dots,T}\mid x_0)
+   q(\mathbf{x}\mid x_0)
    =
    \prod_{t=1}^{T}
    q(x_t\mid x_{t-1}).
@@ -323,32 +323,27 @@ Unlike VAEs, the forward process $q(x_t \mid x_{t-1})$ is no longer parameterize
 Similar to the VAE formulation, we can derive a variational lower bound (ELBO) for the log-likelihood objective. The detailed derivation and intermediate steps are provided in the appendix.
 
 $$
-\begin{aligned}
 \log p(x_0)
-&\ge
-\mathbb{E}_{q(x_{1,\dots,T}\mid x_0)}
+\ge
+\mathbb{E}_{q(\mathbf{x}\mid x_0)}
 \left[
 \log
 \frac{
 p(x_{0:T})
 }{
-q(x_{1,\dots,T}\mid x_0)
+q(\mathbf{x}\mid x_0)
 }
-\right] \\
-&=
-\mathbb{E}_{q(x_{1,\dots,T}\mid x_0)}
+\right]
+=
+\mathbb{E}_{q(\mathbf{x}\mid x_0)}
 \left[
 \log
 \frac{
-p(x_T)
-\prod_{t=1}^{T}
-p_\theta(x_{t-1}\mid x_t)
+p(x_T)\prod_{t=1}^{T}p_\theta(x_{t-1}\mid x_t)
 }{
-\prod_{t=1}^{T}
-q(x_t\mid x_{t-1})
+\prod_{t=1}^{T}q(x_t\mid x_{t-1})
 }
 \right].
-\end{aligned}
 \tag{12}
 $$
 
