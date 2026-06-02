@@ -291,7 +291,7 @@ Several important assumptions and design choices are made in this formulation:
    The forward process is assumed to satisfy the Markov property, meaning each state depends only on the previous state. This allows the joint distribution of the trajectory to be written as
 
    $$
-   q(x_{1:T}\mid x_0)
+   q(x_{1,\dots,T}\mid x_0)
    =
    \prod_{t=1}^{T}
    q(x_t\mid x_{t-1}).
@@ -326,17 +326,17 @@ $$
 \begin{aligned}
 \log p(x_0)
 &\ge
-\mathbb{E}_{q(x_{1:T}\mid x_0)}
+\mathbb{E}_{q(x_{1,\dots,T}\mid x_0)}
 \left[
 \log
 \frac{
 p(x_{0:T})
 }{
-q(x_{1:T}\mid x_0)
+q(x_{1,\dots,T}\mid x_0)
 }
 \right] \\
 &=
-\mathbb{E}_{q(x_{1:T}\mid x_0)}
+\mathbb{E}_{q(x_{1,\dots,T}\mid x_0)}
 \left[
 \log
 \frac{
