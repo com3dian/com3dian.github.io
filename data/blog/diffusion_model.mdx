@@ -618,3 +618,206 @@ x_0.
 $$
 
 At each timestep, the model predicts the noise component in the current sample and uses it to estimate a less noisy sample from the previous timestep. After sufficiently many reverse steps, the final sample $x_0$ approximately follows the data distribution, producing a generated image.
+
+# Denoising Diffusion Implicit Models (DDIM)
+
+The derivation of diffusion models follows a progressive sequence of steps:
+
+$$
+q(\mathbf{x}_t \mid \mathbf{x}_{t-1})
+\xrightarrow{\text{Derivation}}
+q(\mathbf{x}_t \mid \mathbf{x}_0)
+\xrightarrow{\text{Deration}}
+q(\mathbf{x}_{t-1} \mid \mathbf{x}_t, \mathbf{x}_0)
+\xrightarrow{\text{Approximation}}
+p_\theta(\mathbf{x}_{t-1} \mid \mathbf{x}_t).
+$$
+
+Although the derivation is constructed through a stepwise Markov process, the final formulation exhibits two important characteristics:
+
+- **Loss Function Independence:**  
+  The training objective depends only on the marginal distribution $q(\mathbf{x}_t \mid \mathbf{x}_0)$.
+
+- **Sampling Independence:**  
+  The sampling procedure depends only on the learned reverse process $p_\theta(\mathbf{x}_{t-1} \mid \mathbf{x}_t)$.
+
+This observation suggests that the explicit Markovian structure of the forward process is not essential for defining the training objective. As long as the marginal distributions $q(\mathbf{x}_t \mid \mathbf{x}_0)$ remain unchanged, different forward processes can lead to the same optimization objective. DDIM extends this idea by introducing a more general non-Markovian diffusion process.
+
+## DDIM Sampling and Non-Markovian Diffusion
+
+In DDPM, the marginal distribution of $x_t$ conditioned on $x_0$ is Gaussian:
+
+$$
+q(x_t \mid x_0)
+=
+\mathcal{N}
+\left(
+x_t;
+\sqrt{\bar{\alpha}_t}x_0,
+(1-\bar{\alpha}_t)I
+\right).
+$$
+
+DDIM considers a non-Markovian forward process while preserving the same marginal distribution $q(x_t \mid x_0)$. The goal remains to generate $x_0$ starting from Gaussian noise $x_T$. Unlike DDPM, where each reverse step involves sampling from a probability distribution, DDIM introduces an implicit deterministic mapping
+
+$$
+x_{t-1} = f(x_t, t).
+$$
+
+From Equation (\ref{eq:gaussian}), we have the expression for $x_0$. After training a DDPM model, a neural network can be used to approximate the noise component $\epsilon_t$ with $\hat{\epsilon}_\theta(x_t,t)$. Therefore, both the original and estimated forms of $x_0$ can be written as
+
+$$
+x_0
+=
+\frac{1}{\sqrt{\bar{\alpha}_t}}
+\left(
+x_t
+-
+\sqrt{1-\bar{\alpha}_t}\,\epsilon_t
+\right),
+\qquad
+\hat{x}_0
+=
+\frac{1}{\sqrt{\bar{\alpha}_t}}
+\left(
+x_t
+-
+\sqrt{1-\bar{\alpha}_t}\,
+\hat{\epsilon}_\theta(x_t,t)
+\right).
+$$
+
+Applying the diffusion relation again at timestep $t-1$ gives
+
+$$
+x_{t-1}
+=
+\sqrt{\bar{\alpha}_{t-1}}x_0
++
+\sqrt{1-\bar{\alpha}_{t-1}}\epsilon_{t-1}.
+$$
+
+DDIM further decomposes the noise term into a deterministic component and a stochastic component:
+
+$$
+x_{t-1}
+=
+\sqrt{\bar{\alpha}_{t-1}}x_0
++
+\sqrt{1-\bar{\alpha}_{t-1}-\sigma_t^2}
+\,\hat{\epsilon}_\theta(x_t,t)
++
+\sigma_t\epsilon,
+$$
+
+where $\epsilon \sim \mathcal{N}(0,I)$.
+
+Substituting the estimate of $x_0$ into this expression gives
+
+$$
+x_{t-1}
+=
+\sqrt{\bar{\alpha}_{t-1}}
+\left(
+\frac{
+x_t
+-
+\sqrt{1-\bar{\alpha}_t}\,
+\hat{\epsilon}_\theta(x_t,t)
+}{
+\sqrt{\bar{\alpha}_t}
+}
+\right)
++
+\sqrt{1-\bar{\alpha}_{t-1}- \sigma_t^2}
+\,\hat{\epsilon}_\theta(x_t,t)
++
+\sigma_t\epsilon.
+$$
+
+This defines the DDIM sampling process:
+
+$$
+q_\sigma(x_{t-1} \mid x_t, x_0)
+=
+\mathcal{N}
+\Bigl(
+x_{t-1};
+\mu_\sigma(x_t,x_0),
+\sigma_t^2 I
+\Bigr).
+$$
+
+where
+
+$$
+\mu_\sigma(x_t,x_0)
+=
+\sqrt{\bar{\alpha}_{t-1}}
+\left(
+\frac{
+x_t
+-
+\sqrt{1-\bar{\alpha}_t}\,
+\hat{\epsilon}_\theta(x_t,t)
+}{
+\sqrt{\bar{\alpha}_t}
+}
+\right)
++
+\sqrt{1-\bar{\alpha}_{t-1}-\sigma_t^2}
+\,\hat{\epsilon}_\theta(x_t,t).
+$$
+
+We can treat $\sigma_t^2$ as a hyperparameter that controls the stochasticity of the sampling process. When $\sigma_t^2 = 0$, the sampling process becomes fully deterministic. When
+
+$$
+\sigma_t^2
+=
+\frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t}
+(1-\alpha_t),
+$$
+
+the sampling process reduces to the original DDPM formulation (Appendix \ref{app:ddim-ddpm-equiv}).
+
+During generation, it is not necessary to follow the entire sequence of timesteps $\{1,\dots,T\}$. Instead, we may sample using only a subset of timesteps. Let $m < n$ denote two timesteps in this trajectory. The DDIM reverse update step is then given by
+
+$$
+q_{\sigma, m < n}
+(\mathbf{x}_m \mid \mathbf{x}_n, \mathbf{x}_0)
+=
+\mathcal{N}
+\Bigg(
+\mathbf{x}_m;
+\sqrt{\bar{\alpha}_m}
+\left(
+\frac{
+\mathbf{x}_n
+-
+\sqrt{1-\bar{\alpha}_n}
+\hat{\epsilon}_\theta^{(n)}(\mathbf{x}_n, n)
+}{
+\sqrt{\bar{\alpha}_n}
+}
+\right)
++
+\sqrt{1-\bar{\alpha}_m-\sigma_n^2}
+\,
+\hat{\epsilon}_\theta^{(n)}(\mathbf{x}_n, n),
+\,
+\sigma_n^2 \mathbf{I}
+\Bigg).
+$$
+
+This formulation gives DDIM two important advantages over DDPM:
+
+1. By controlling the parameter $\sigma_t$, the sampling process can interpolate between stochastic and deterministic generation.
+
+2. Since sampling does not need to follow the full sequence of timesteps, generation can be performed using only a subset
+
+$$
+\tau = \{\tau_1,\dots,\tau_S\},
+\qquad S \ll T,
+$$
+
+which significantly reduces the computational cost while maintaining comparable sample quality.
