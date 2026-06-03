@@ -844,3 +844,181 @@ $$
 $$
 
 which significantly reduces the computational cost while maintaining comparable sample quality.
+
+# Connection to Score-based Models
+
+In this section, we show the connection between diffusion models and score-based generative models.
+
+Directly modeling the likelihood function $p(x)$ is often intractable, and estimating it using methods such as Markov chain Monte Carlo (MCMC) or variational inference can be computationally expensive. Score-based models address this difficulty by modeling the _score function_ instead of the probability density itself. The score function of a distribution is defined as
+
+$$
+\nabla_x \log p(x).
+\tag{40}
+$$
+
+Rather than learning the density function directly, score-based models learn the gradient of the log-density. Similar to other likelihood-based generative models, such as VAEs, the objective is still related to maximizing likelihood, but the optimization is performed through _score matching_. The corresponding objective minimizes the Fisher divergence:
+
+$$
+\mathbb{E}_{p(x)}
+\left[
+\left\|
+\nabla_x \log p(x)
+-
+s_\theta(x)
+\right\|_2^2
+\right],
+\tag{41}
+$$
+
+where $s_\theta(x)$ denotes the learned score function.
+
+An important advantage of score-based models is that they do not require a tractable normalizing constant for the probability density. Instead, the model directly learns a vector field describing the direction of increasing probability density.
+
+However, score estimation in low-density regions is often inaccurate. Expanding the Fisher divergence gives
+
+$$
+\mathbb{E}_{p(x)}
+\left[
+\left\|
+\nabla_x \log p(x)
+-
+s_\theta(x)
+\right\|_2^2
+\right]
+=
+\int p(x)
+\left\|
+\nabla_x \log p(x)
+-
+s_\theta(x)
+\right\|_2^2
+\, dx
+\tag{42}
+$$
+
+Since the weighting term $p(x)$ is small in low-density regions, errors in these regions contribute little to the optimization objective. As a result, the learned score function is often inaccurate far from the data manifold.
+
+## Score-based Modeling with Multiple Noise Perturbations
+
+To address this issue, score-based models perturb the data with Gaussian noise and train the score function on the perturbed distributions instead. Large noise levels improve coverage of low-density regions, while small noise levels preserve the structure of the original data distribution.
+
+To balance these effects, multiple noise scales are introduced. Let $\{\eta_t\}_{t=1}^{T}$ denote a sequence of noise levels. Given a data sample $x \sim p(x)$, we generate a perturbed sample
+
+$$
+x_t = x + \eta_t \epsilon,
+\qquad
+\epsilon \sim \mathcal{N}(0,I)
+\tag{43}
+$$
+
+The resulting perturbed distribution is (Appendix `app:noisy-data`)
+
+$$
+p_t(x_t)
+=
+\int p(y)\,
+\mathcal{N}(x_t; y, \eta_t^2 I)\,
+dy
+\tag{44}
+$$
+
+A noise-conditional score network (NCSN) is then trained to estimate the score function at different noise levels. The training objective becomes
+
+$$
+\sum_{t=1}^{T}
+\lambda(t)
+\mathbb{E}_{p_t(x_t)}
+\left[
+\left\|
+\nabla_{x_t}\log p_t(x_t)
+-
+s_\theta(x_t,t)
+\right\|_2^2
+\right].
+\tag{45}
+$$
+
+## Equivalence to Diffusion Models
+
+The connection between score-based models and diffusion models comes from the fact that predicting the noise added to a sample is equivalent to estimating the score function.
+
+In diffusion models, the forward conditional from Eq. (29) is $p(x_t \mid x_0)=\mathcal{N}\bigl(x_t;\, \sqrt{\bar{\alpha}_t}x_0,\, (1-\bar{\alpha}_t)I\bigr)$. Differentiating the log-density with respect to $x_t$ yields
+
+$$
+\nabla_{x_t}\log p(x_t \mid x_0)
+=
+-\frac{x_t - \sqrt{\bar{\alpha}_t}x_0}{1-\bar{\alpha}_t}.
+\tag{46}
+$$
+
+With the usual reparameterization from Eq. (22), $x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\,\epsilon$, this becomes
+
+$$
+\nabla_{x_t}\log p(x_t \mid x_0)
+=
+-\frac{\epsilon}{\sqrt{1-\bar{\alpha}_t}}.
+\tag{47}
+$$
+
+Substituting into the score-matching objective and comparing with the DDPM noise-prediction loss in Eq. (25), we consider
+
+$$
+\sum_{t=1}^{T}\lambda(t)\,
+\mathbb{E}\left[
+\left\|
+-\frac{\epsilon}{\sqrt{1-\bar{\alpha}_t}}
+-
+s_\theta(x_t,t)
+\right\|_2^2
+\right]
+\quad\text{and}\quad
+\mathbb{E}_{t,x_0,\epsilon}
+\left[
+\left\|
+\epsilon
+-
+\hat{\epsilon}_\theta(x_t,t)
+\right\|_2^2
+\right].
+\tag{48}
+$$
+
+These differ only by a scaling factor; in particular,
+
+$$
+s_\theta(x_t,t)
+\approx
+-\frac{\hat{\epsilon}_\theta(x_t,t)}{\sqrt{1-\bar{\alpha}_t}}.
+\tag{49}
+$$
+
+Therefore, training a diffusion model to predict noise is equivalent to training a score-based model.
+
+Once the score is learned, one may sample using Langevin dynamics, where $t$ denotes the outer iterate index:
+
+$$
+x_{t+1}
+=
+x_t + \gamma \nabla_x \log p(x_t) + \sqrt{2\gamma}\, z_t,
+\qquad
+z_t \sim \mathcal{N}(0,I).
+\tag{50}
+$$
+
+Replacing $\nabla_x \log p$ by the diffusion noise predictor at diffusion timestep $n$ gives
+
+$$
+x_{t+1}
+\approx
+x_t
+-
+\gamma \,
+\frac{\hat{\epsilon}_\theta(x_t,n)}{\sqrt{1-\bar{\alpha}_n}}
++
+\sqrt{2\gamma}\, z_t.
+\tag{51}
+$$
+
+This highlights the close relationship between score-based sampling and diffusion-model denoising.
+
+In the continuous-time limit, diffusion can be written as a stochastic differential equation (SDE), and the reverse process (together with a deterministic _probability-flow_ ODE) links DDPM- and DDIM-style sampling to score-based dynamics. Details and equations are given in Appendix `app:sde-score`.
