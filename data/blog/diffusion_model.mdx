@@ -1,5 +1,6 @@
 ---
 title: 'Diffusion Models: A Unified View of Learning to Sample'
+images: ['/static/images/blog/diffusion_model/banner.jpg']
 date: '2026-05-23'
 tags: ['generative AI', 'computer vision']
 draft: false
@@ -558,39 +559,9 @@ In the simplified DDPM objective, $\lambda(t)$ is commonly set to $1$, which emp
 
 In practice, the reconstruction term is also absorbed into the simplified denoising objective. Consequently, training is dominated by the noise-prediction loss, which teaches the model to estimate the Gaussian noise added at each diffusion timestep.
 
-### Training Algorithm
+### Training and Sampling Algorithm
 
-```text
-repeat
-    x₀ ~ q(x₀)
-    t ~ Uniform({1, ..., T})
-    ε ~ N(0, I)
-
-    x_t = √ᾱ_t x₀ + √(1-ᾱ_t) ε
-
-    Update θ using:
-        || ε - ε̂_θ(x_t, t) ||²
-until converged
-```
-
-### Sampling Algorithm
-
-```text
-x_T ~ N(0, I)
-
-for t = T, ..., 1
-    z ~ N(0, I) if t > 1 else 0
-
-    x_{t-1} =
-        1/√α_t (
-            x_t
-            - (1-α_t)/√(1-ᾱ_t) · ε̂_θ(x_t,t)
-        )
-        + σ_t z
-end
-
-return x₀
-```
+![DDPM forward process](/static/images/blog/diffusion_model/algo.png)
 
 In reverse sampling, $\sigma_t$ is a tunable hyperparameter that controls how much random noise is injected at each timestep.
 
