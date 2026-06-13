@@ -16,6 +16,8 @@ This blog presents a unified derivation of two foundational approaches---[Denois
 
 # Prefix
 
+![Banner](/static/images/blog/diffusion_model/banner.png)
+
 Generative models can be viewed as the processes that sample from an unknown data distribution. In image generation, the data distribution represents all possible images, while in language generation it is the distribution over possible sequences of text. In this blog, we adopt this perspective to re-derive the formalism of a class of image generation models—specifically diffusion models, including denoising diffusion probabilistic models (DDPM) and denoising diffusion implicit models (DDIM)—which form the basis of state-of-the-art systems such as Stable Diffusion and DALL·E.
 
 Intuitively, one might consider a Monte Carlo approach in which samples are drawn from a simple, known distribution and only those consistent with the target data distribution are retained. However, such naive rejection sampling from a simple proposal distribution is infeasible in high dimensions, as the probability of accepting a sample becomes vanishingly small. Suppose we want to generate an RGB image of size $(512, 512)$; the dimensionality of the space is $512 \times 512 \times 3$, and each dimension takes values in $\{0, 1, ..., 255\}$. Since natural images lie on a highly structured, low-dimensional subset of this space, most samples from a simple distribution are very unlikely to correspond to realistic images, making such approaches extremely inefficient.
