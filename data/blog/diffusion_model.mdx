@@ -115,7 +115,7 @@ We now turn to how to define the optimization problem. For simplicity, we use a 
 
 To define the optimization problem, a natural approach is to use likelihood-based learning. Given a dataset $\{x_i\}_{i=1}^N$, the objective is to maximize the likelihood of the data under the model, i.e., maximize $p_\theta(x_i)$ for all samples. A naive approach might be to sample latent variables $z_i$ from a Gaussian distribution and arbitrarily associate them with data samples $x_i$, then optimize the likelihood based on these random pairings. However, this approach is flawed because such random pairings do not establish a meaningful relationship between the latent variables and the data samples. As a result, the model cannot learn how changes in the latent space correspond to variations in the data. Instead, it may rely on overall statistics of the dataset and largely ignore the latent variables. Under common training objectives, this can lead to outputs that resemble an average of the data distribution, rather than distinct and realistic samples.
 
-This issue suggests that, to learn a meaningful transformation, it is not sufficient to consider only the marginal likelihood $p_\theta(x)$. Instead, we should explicitly model the relationship between $x$ and $z$. To achieve this, we introduce the conditional distribution $p(x \mid z)$, which describes how a data point $x$ is generated from a latent variable $z$. This provides the necessary structure to guide the learning process and establish a meaningful mapping between the latent space and the data space.
+**This issue suggests that, to learn a meaningful transformation, it is not sufficient to consider only the marginal likelihood $p_\theta(x)$.** Instead, we should explicitly model the relationship between $x$ and $z$. To achieve this, we introduce the conditional distribution $p(x \mid z)$, which describes how a data point $x$ is generated from a latent variable $z$. This provides the necessary structure to guide the learning process and establish a meaningful mapping between the latent space and the data space.
 
 We introduce a variational distribution $q_\phi(z \mid x)$ to approximate the intractable posterior $p(z \mid x)$, where $\phi$ denotes the parameters to be optimized. This allows us to reformulate the objective in terms of the marginal likelihood $p_\theta(x)$ and work with its logarithm, $\log p_\theta(x)$, which is more convenient for optimization.
 
@@ -772,7 +772,7 @@ $$
 \tag{37}
 $$
 
-the sampling process in Eq. (35) reduces to the original DDPM formulation (Appendix `app:ddim-ddpm-equiv`).
+the sampling process in Eq. (35) reduces to the original DDPM formulation.
 
 During generation, it is not necessary to follow the entire sequence of timesteps $\{1,\dots,T\}$. Instead, we may sample using only a subset of timesteps. Let $m < n$ denote two timesteps in this trajectory. The DDIM reverse update step is then given by Eq. (38),
 
@@ -884,7 +884,7 @@ x_t = x + \eta_t \epsilon,
 \tag{43}
 $$
 
-The resulting perturbed distribution is (Appendix `app:noisy-data`)
+The resulting perturbed distribution is
 
 $$
 p_t(x_t)
@@ -994,4 +994,4 @@ $$
 
 This highlights the close relationship between score-based sampling and diffusion-model denoising.
 
-In the continuous-time limit, diffusion can be written as a stochastic differential equation (SDE), and the reverse process (together with a deterministic _probability-flow_ ODE) links DDPM- and DDIM-style sampling to score-based dynamics. Details and equations are given in Appendix `app:sde-score`.
+In the continuous-time limit, diffusion can be written as a stochastic differential equation (SDE), and the reverse process (together with a deterministic _probability-flow_ ODE) links DDPM- and DDIM-style sampling to score-based dynamics.
