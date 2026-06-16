@@ -777,9 +777,10 @@ the sampling process in Eq. (35) reduces to the original DDPM formulation.
 During generation, it is not necessary to follow the entire sequence of timesteps $\{1,\dots,T\}$. Instead, we may sample using only a subset of timesteps. Let $m < n$ denote two timesteps in this trajectory. The DDIM reverse update step is then given by Eq. (38),
 
 $$
-q_{\sigma, m < n}
+\begin{aligned}
+& q_{\sigma, m < n}
 (\mathbf{x}_m \mid \mathbf{x}_n, \mathbf{x}_0)\\
-=
+& =
 \mathcal{N}
 \Bigg(
 \mathbf{x}_m;
@@ -802,6 +803,7 @@ q_{\sigma, m < n}
 \sigma_n^2 \mathbf{I}
 \Bigg)
 \tag{38}
+\end{aligned}
 $$
 
 This formulation gives DDIM two important advantages over DDPM:
