@@ -13,10 +13,10 @@ interface CollapsibleTOCProps {
 }
 
 const tocListClassName = [
-  'list-none space-y-1.5 pl-0',
+  'list-none space-y-0.5 pl-0',
   '[&_a]:text-gray-700 [&_a]:no-underline [&_a]:hover:text-primary-600',
   'dark:[&_a]:text-gray-300 dark:[&_a]:hover:text-primary-400',
-  '[&_ul]:mt-1.5 [&_ul]:list-none [&_ul]:space-y-1.5 [&_ul]:pl-4',
+  '[&_ul]:mt-0.5 [&_ul]:list-none [&_ul]:space-y-0.5 [&_ul]:pl-4',
   // Level 1: filled dot (on link so nested ul stays below)
   '[&>li>a]:inline-flex [&>li>a]:items-center [&>li>a]:gap-2',
   "[&>li>a]:before:size-1.5 [&>li>a]:before:shrink-0 [&>li>a]:before:rounded-full [&>li>a]:before:bg-primary-500 [&>li>a]:before:content-['']",
@@ -49,7 +49,7 @@ export default function CollapsibleTOC({ toc, defaultOpen = true }: CollapsibleT
         </span>
       </summary>
       <nav
-        className="prose dark:prose-invert mt-3 max-w-none pt-3 text-base leading-7"
+        className="mt-3 pt-3 text-base leading-normal font-sans"
         aria-label="Table of contents"
       >
         <TOCInline toc={toc} fromHeading={1} toHeading={6} ulClassName={tocListClassName} />
