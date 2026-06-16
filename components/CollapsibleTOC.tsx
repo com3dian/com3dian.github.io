@@ -12,6 +12,20 @@ interface CollapsibleTOCProps {
   defaultOpen?: boolean
 }
 
+const tocListClassName = [
+  'list-none space-y-1.5 pl-0',
+  '[&_a]:text-gray-700 [&_a]:no-underline [&_a]:hover:text-primary-600',
+  'dark:[&_a]:text-gray-300 dark:[&_a]:hover:text-primary-400',
+  '[&_ul]:mt-1.5 [&_ul]:list-none [&_ul]:space-y-1.5 [&_ul]:pl-4',
+  // Level 1: filled dot
+  '[&>li]:flex [&>li]:items-center [&>li]:gap-2',
+  "[&>li]:before:size-1.5 [&>li]:before:shrink-0 [&>li]:before:rounded-full [&>li]:before:bg-primary-500 [&>li]:before:content-['']",
+  // Level 2+: hollow dot
+  '[&_ul>li]:flex [&_ul>li]:items-center [&_ul>li]:gap-2',
+  "[&_ul>li]:before:size-1.5 [&_ul>li]:before:shrink-0 [&_ul>li]:before:rounded-full [&_ul>li]:before:border [&_ul>li]:before:border-primary-500 [&_ul>li]:before:bg-transparent [&_ul>li]:before:content-['']",
+  'dark:[&_ul>li]:before:border-primary-400',
+].join(' ')
+
 export default function CollapsibleTOC({ toc, defaultOpen = true }: CollapsibleTOCProps) {
   const hasHeadings = toc?.some((heading) => heading.depth >= 1 && heading.depth <= 6)
   if (!hasHeadings) {
@@ -39,7 +53,7 @@ export default function CollapsibleTOC({ toc, defaultOpen = true }: CollapsibleT
           toc={toc}
           fromHeading={1}
           toHeading={6}
-          ulClassName="list-none space-y-1.5 pl-0 [&_a]:text-gray-700 [&_a]:no-underline [&_a]:hover:text-primary-600 dark:[&_a]:text-gray-300 dark:[&_a]:hover:text-primary-400 [&_ul]:mt-1.5 [&_ul]:list-none [&_ul]:space-y-1.5 [&_ul]:pl-4"
+          ulClassName={tocListClassName}
         />
       </nav>
     </details>
