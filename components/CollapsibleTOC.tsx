@@ -37,7 +37,7 @@ export default function CollapsibleTOC({ toc, defaultOpen = true }: CollapsibleT
       className="group mb-3 rounded-md bg-gray-50/80 px-4 py-3 dark:bg-gray-800/40"
       open={defaultOpen}
     >
-      <summary className="cursor-pointer list-none text-sm font-medium text-gray-800 select-none marker:content-none dark:text-gray-200 [&::-webkit-details-marker]:hidden">
+      <summary className="cursor-pointer list-none text-base font-medium text-gray-800 select-none marker:content-none dark:text-gray-200 [&::-webkit-details-marker]:hidden">
         <span className="flex items-center gap-2">
           <span
             className="inline-block text-gray-400 transition-transform group-open:rotate-90"
@@ -48,7 +48,10 @@ export default function CollapsibleTOC({ toc, defaultOpen = true }: CollapsibleT
           Table of contents
         </span>
       </summary>
-      <nav className="mt-3 pt-3" aria-label="Table of contents">
+      <nav
+        className="prose dark:prose-invert mt-3 max-w-none pt-3 text-base leading-7"
+        aria-label="Table of contents"
+      >
         <TOCInline toc={toc} fromHeading={1} toHeading={6} ulClassName={tocListClassName} />
       </nav>
     </details>
