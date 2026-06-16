@@ -48,10 +48,7 @@ export default function CollapsibleTOC({ toc, defaultOpen = true }: CollapsibleT
           Table of contents
         </span>
       </summary>
-      <nav
-        className="mt-3 pt-3 text-base leading-normal font-sans"
-        aria-label="Table of contents"
-      >
+      <nav className="mt-3 pt-3 font-sans text-base leading-normal" aria-label="Table of contents">
         <TOCInline toc={toc} fromHeading={1} toHeading={6} ulClassName={tocListClassName} />
       </nav>
     </details>
