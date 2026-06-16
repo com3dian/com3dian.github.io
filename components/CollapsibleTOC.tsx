@@ -49,12 +49,7 @@ export default function CollapsibleTOC({ toc, defaultOpen = true }: CollapsibleT
         </span>
       </summary>
       <nav className="mt-3 pt-3" aria-label="Table of contents">
-        <TOCInline
-          toc={toc}
-          fromHeading={1}
-          toHeading={6}
-          ulClassName={tocListClassName}
-        />
+        <TOCInline toc={toc} fromHeading={1} toHeading={6} ulClassName={tocListClassName} />
       </nav>
     </details>
   )
