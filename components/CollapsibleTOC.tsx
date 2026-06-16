@@ -17,13 +17,13 @@ const tocListClassName = [
   '[&_a]:text-gray-700 [&_a]:no-underline [&_a]:hover:text-primary-600',
   'dark:[&_a]:text-gray-300 dark:[&_a]:hover:text-primary-400',
   '[&_ul]:mt-1.5 [&_ul]:list-none [&_ul]:space-y-1.5 [&_ul]:pl-4',
-  // Level 1: filled dot
-  '[&>li]:flex [&>li]:items-center [&>li]:gap-2',
-  "[&>li]:before:size-1.5 [&>li]:before:shrink-0 [&>li]:before:rounded-full [&>li]:before:bg-primary-500 [&>li]:before:content-['']",
+  // Level 1: filled dot (on link so nested ul stays below)
+  '[&>li>a]:inline-flex [&>li>a]:items-center [&>li>a]:gap-2',
+  "[&>li>a]:before:size-1.5 [&>li>a]:before:shrink-0 [&>li>a]:before:rounded-full [&>li>a]:before:bg-primary-500 [&>li>a]:before:content-['']",
   // Level 2+: hollow dot
-  '[&_ul>li]:flex [&_ul>li]:items-center [&_ul>li]:gap-2',
-  "[&_ul>li]:before:size-1.5 [&_ul>li]:before:shrink-0 [&_ul>li]:before:rounded-full [&_ul>li]:before:border [&_ul>li]:before:border-primary-500 [&_ul>li]:before:bg-transparent [&_ul>li]:before:content-['']",
-  'dark:[&_ul>li]:before:border-primary-400',
+  '[&_ul>li>a]:inline-flex [&_ul>li>a]:items-center [&_ul>li>a]:gap-2',
+  "[&_ul>li>a]:before:size-1.5 [&_ul>li>a]:before:shrink-0 [&_ul>li>a]:before:rounded-full [&_ul>li>a]:before:border [&_ul>li>a]:before:border-primary-500 [&_ul>li>a]:before:bg-transparent [&_ul>li>a]:before:content-['']",
+  'dark:[&_ul>li>a]:before:border-primary-400',
 ].join(' ')
 
 export default function CollapsibleTOC({ toc, defaultOpen = true }: CollapsibleTOCProps) {
