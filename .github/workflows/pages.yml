@@ -5,11 +5,15 @@ on:
   push:
     branches: main
   workflow_dispatch:
+  # Rebuild daily so paragraph comment badges (baked at build time) stay fresh.
+  schedule:
+    - cron: '0 4 * * *'
 
 permissions:
   contents: read
   pages: write
   id-token: write
+  discussions: read
 
 concurrency:
   group: 'pages'
@@ -39,6 +43,12 @@ jobs:
           EXPORT: 1
           UNOPTIMIZED: 1
           BASE_PATH: ${{ steps.configurepages.outputs.base_path }}
+          NEXT_PUBLIC_GISCUS_REPO: ${{ vars.NEXT_PUBLIC_GISCUS_REPO }}
+          NEXT_PUBLIC_GISCUS_REPOSITORY_ID: ${{ vars.NEXT_PUBLIC_GISCUS_REPOSITORY_ID }}
+          NEXT_PUBLIC_GISCUS_CATEGORY: ${{ vars.NEXT_PUBLIC_GISCUS_CATEGORY }}
+          NEXT_PUBLIC_GISCUS_CATEGORY_ID: ${{ vars.NEXT_PUBLIC_GISCUS_CATEGORY_ID }}
+          # Used by scripts/fetch-comment-counts.mjs to read Discussion comment counts
+          GITHUB_TOKEN: ${{ github.token }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
