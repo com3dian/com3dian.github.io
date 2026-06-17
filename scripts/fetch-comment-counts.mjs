@@ -9,7 +9,7 @@
 import { writeFileSync, existsSync, mkdirSync } from 'fs'
 import { dirname } from 'path'
 
-const OUTPUT_PATH = './data/comment-counts.json'
+const OUTPUT_PATH = './comment-counts.json'
 
 function ensureFile() {
   if (!existsSync(OUTPUT_PATH)) {

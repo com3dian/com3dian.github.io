@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTheme } from 'next-themes'
 import siteMetadata from '@/data/siteMetadata'
-import commentCounts from '@/data/comment-counts.json'
+import commentCounts from '../comment-counts.json'
 
 const counts = commentCounts as Record<string, number>
 
@@ -98,9 +98,7 @@ export default function ParagraphComments({ slug }: { slug: string }) {
     const container = document.getElementById('post-content')
     if (!container) return
 
-    const paragraphs = Array.from(
-      container.querySelectorAll<HTMLParagraphElement>(':scope > p')
-    )
+    const paragraphs = Array.from(container.querySelectorAll<HTMLParagraphElement>(':scope > p'))
     const created: HTMLButtonElement[] = []
 
     paragraphs.forEach((p, index) => {
@@ -112,8 +110,7 @@ export default function ParagraphComments({ slug }: { slug: string }) {
       btn.type = 'button'
       btn.className = 'pc-icon-btn' + (count > 0 ? ' pc-has' : '')
       btn.setAttribute('aria-label', count > 0 ? `${count} comments` : 'Add a comment')
-      btn.innerHTML =
-        COMMENT_SVG + (count > 0 ? `<span class="pc-count">${count}</span>` : '')
+      btn.innerHTML = COMMENT_SVG + (count > 0 ? `<span class="pc-count">${count}</span>` : '')
       btn.addEventListener('click', (e) => {
         e.preventDefault()
         openPanel(term, p.textContent?.trim().slice(0, 80) ?? '')
