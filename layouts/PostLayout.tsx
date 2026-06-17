@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog, Authors } from 'contentlayer/generated'
 import Comments from '@/components/Comments'
+import ParagraphComments from '@/components/ParagraphComments'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
@@ -108,7 +109,10 @@ export default function PostLayout({
               </dd>
             </dl>
             <div className="xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose dark:prose-invert max-w-none pb-8">{children}</div>
+              <div id="post-content" className="prose dark:prose-invert max-w-none pb-8">
+                {children}
+              </div>
+              {siteMetadata.comments && <ParagraphComments slug={slug} />}
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
                 <Link href={discussUrl(path)} rel="nofollow">
                   Discuss on Twitter

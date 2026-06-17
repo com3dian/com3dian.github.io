@@ -25,6 +25,23 @@ const siteMetadata = {
       searchDocumentsPath: `${process.env.BASE_PATH || ''}/search.json`,
     },
   },
+  comments: {
+    provider: 'giscus',
+    giscusConfig: {
+      // Visit https://giscus.app to enable the app and get these values.
+      repo: process.env.NEXT_PUBLIC_GISCUS_REPO,
+      repositoryId: process.env.NEXT_PUBLIC_GISCUS_REPOSITORY_ID,
+      category: process.env.NEXT_PUBLIC_GISCUS_CATEGORY,
+      categoryId: process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID,
+      mapping: 'pathname',
+      reactions: '1',
+      metadata: '0',
+      theme: 'light',
+      darkTheme: 'transparent_dark',
+      themeURL: '',
+      lang: 'en',
+    },
+  },
 }
 
 module.exports = siteMetadata

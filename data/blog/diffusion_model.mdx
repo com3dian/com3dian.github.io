@@ -18,7 +18,7 @@ This blog presents a unified derivation of two foundational approaches---[Denois
 
 ![Banner](/static/images/blog/diffusion_model/banner.png)
 
-Generative models can be viewed as the processes that sample from an unknown data distribution. In image generation, the data distribution represents all possible images, while in language generation it is the distribution over possible sequences of text. In this blog, we adopt this perspective to re-derive the formalism of a class of image generation models—specifically diffusion models, including denoising diffusion probabilistic models (DDPM) and denoising diffusion implicit models (DDIM)—which form the basis of state-of-the-art systems such as Stable Diffusion and DALL·E.
+Generative models can be viewed as the processes that **sample from an unknown data distribution**. In image generation, the data distribution represents all possible images, while in language generation it is the distribution over possible sequences of text. In this blog, we adopt this perspective to re-derive the formalism of a class of image generation models—specifically diffusion models, including denoising diffusion probabilistic models (DDPM) and denoising diffusion implicit models (DDIM)—which form the basis of state-of-the-art systems such as Stable Diffusion and DALL·E.
 
 Intuitively, one might consider a Monte Carlo approach in which samples are drawn from a simple, known distribution and only those consistent with the target data distribution are retained. However, such naive rejection sampling from a simple proposal distribution is infeasible in high dimensions, as the probability of accepting a sample becomes vanishingly small. Suppose we want to generate an RGB image of size $(512, 512)$; the dimensionality of the space is $512 \times 512 \times 3$, and each dimension takes values in $\{0, 1, ..., 255\}$. Since natural images lie on a highly structured, low-dimensional subset of this space, most samples from a simple distribution are very unlikely to correspond to realistic images, making such approaches extremely inefficient.
 
@@ -101,7 +101,7 @@ In this section, we discuss the foundations of diffusion models, along with key 
 
 As discussed earlier, one common approach to generative modeling is to learn a transformation from a known, easy-to-sample distribution $p(z)$ to an unknown data distribution $p_{\text{data}}(x)$, which describes real data.
 
-In general, this transformation is not available in closed form. Instead, it can be learned by defining a trainable objective (i.e., a loss function) that measures the difference between the model distribution $p_{\theta}(x)$ and the data distribution $p_{\text{data}}(x)$, and optimizing it using a neural network. The optimal parameters then define a model that approximates the target distribution. In this way, the problem of generating data is reduced to defining and solving an optimization problem.
+In general, this transformation is not available in closed form. Instead, it can be learned by defining a trainable objective (i.e., a loss function) that measures the difference between the model distribution $p_{\theta}(x)$ and the data distribution $p_{\text{data}}(x)$, and optimizing it using a neural network. The optimal parameters then define a model that approximates the target distribution. Ifgn this way, the problem of generating data is reduced to defining and solving an optimization problem.
 
 <a id="ass:regular-transform" />
 > **Assumption 1**  
@@ -161,7 +161,7 @@ In practice, this objective is optimized using two neural networks: one paramete
 
 ## Training and Reparameterization
 
-In VAEs, the encoder is modeled as a Gaussian distribution parameterized by $\phi$, while the prior distribution over the latent variable is chosen to be a standard Gaussian:
+We just introduced ELBO, following we explain how a VAE is trained to maximize it. In VAEs, the encoder is modeled as a Gaussian distribution parameterized by $\phi$, while the prior distribution over the latent variable is chosen to be a standard Gaussian:
 
 $$
 \begin{align}
@@ -198,7 +198,7 @@ After training, the VAE consists of an encoder $q_\phi(z \mid x)$ and a decoder 
 
 Previously, we saw that in variational autoencoders (VAEs), the transformation from a known prior distribution to the data distribution is learned implicitly through an encoder–decoder pair. A limitation of this approach is that the relationship between data and latent variables is only captured through an approximate posterior, which introduces additional modeling and inference complexity.
 
-An alternative approach is to construct a stepwise transformation from the data distribution to a Gaussian distribution. Intuitively, this can be understood as forming a linear combination of the original data and Gaussian noise. Over time, the contribution of the noise gradually increases while the contribution of the data decreases, eventually resulting in pure Gaussian noise.
+An alternative approach is to **construct a stepwise transformation from the data distribution to a Gaussian distribution**. Intuitively, this can be understood as forming a linear combination of the original data and Gaussian noise. Over time, the contribution of the noise gradually increases while the contribution of the data decreases, eventually resulting in pure Gaussian noise.
 
 Equivalently, this process can be defined as a stepwise Markov chain. For convenience, we introduce the following notation:
 
@@ -822,7 +822,7 @@ which significantly reduces the computational cost while maintaining comparable 
 
 # Connection to Score-based Models
 
-In this section, we show the connection between diffusion models and score-based generative models.
+Having introduced the basics of diffusion models, we now show the connection between diffusion models and score-based generative models.
 
 Directly modeling the likelihood function $p(x)$ is often intractable, and estimating it using methods such as Markov chain Monte Carlo (MCMC) or variational inference can be computationally expensive. Score-based models address this difficulty by modeling the _score function_ instead of the probability density itself. The score function of a distribution is defined as
 

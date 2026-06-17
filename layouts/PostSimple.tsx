@@ -8,6 +8,7 @@ import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import CollapsibleTOC, { TocHeading } from '@/components/CollapsibleTOC'
+import ParagraphComments from '@/components/ParagraphComments'
 
 interface LayoutProps {
   content: CoreContent<Blog>
@@ -18,7 +19,7 @@ interface LayoutProps {
 }
 
 export default function PostLayout({ content, toc, next, prev, children }: LayoutProps) {
-  const { date, title } = content
+  const { date, title, slug } = content
 
   return (
     <SectionContainer>
@@ -37,7 +38,10 @@ export default function PostLayout({ content, toc, next, prev, children }: Layou
             </div>
           )}
         </header>
-        <div className="prose dark:prose-invert max-w-none pb-8">{children}</div>
+        <div id="post-content" className="prose dark:prose-invert max-w-none pb-8">
+          {children}
+        </div>
+        {siteMetadata.comments && <ParagraphComments slug={slug} />}
         <footer className="space-y-6 pt-8 text-sm">
           {(prev?.path || next?.path) && (
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
