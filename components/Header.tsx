@@ -1,6 +1,7 @@
 import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
 import Link from './Link'
+import Image from './Image'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
@@ -14,7 +15,16 @@ const Header = () => {
   return (
     <header className={headerClass}>
       <Link href="/" aria-label={siteMetadata.headerTitle}>
-        {typeof siteMetadata.headerTitle === 'string' ? (
+        {siteMetadata.siteLogo ? (
+          <Image
+            src="/static/images/logo.png"
+            alt={typeof siteMetadata.headerTitle === 'string' ? siteMetadata.headerTitle : "Lu's Log"}
+            width={40}
+            height={40}
+            className="h-9 w-9 rounded-full"
+            priority
+          />
+        ) : typeof siteMetadata.headerTitle === 'string' ? (
           <span className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             {siteMetadata.headerTitle}
           </span>
