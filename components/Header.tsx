@@ -12,13 +12,16 @@ const Header = () => {
     headerClass += ' sticky top-0 z-50 bg-white dark:bg-[#1d1e20]'
   }
 
+  const logoAlt =
+    typeof siteMetadata.headerTitle === 'string' ? siteMetadata.headerTitle : "Lu's Log"
+
   return (
     <header className={headerClass}>
       <Link href="/" aria-label={siteMetadata.headerTitle}>
         {siteMetadata.siteLogo ? (
           <Image
             src="/static/images/logo.png"
-            alt={typeof siteMetadata.headerTitle === 'string' ? siteMetadata.headerTitle : "Lu's Log"}
+            alt={logoAlt}
             width={40}
             height={40}
             className="h-9 w-9 rounded-full"
