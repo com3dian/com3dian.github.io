@@ -1,11 +1,16 @@
 {
-  "name": "com3dian",
-  "short_name": "com3dian",
+  "name": "Lu's Log",
+  "short_name": "Lu's Log",
   "icons": [
     {
-      "src": "/static/favicons/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
+      "src": "/static/favicons/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/favicons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
     }
   ],
   "theme_color": "#1d1e20",

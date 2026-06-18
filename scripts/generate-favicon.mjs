@@ -1,24 +1,27 @@
 import { execFileSync } from 'child_process'
-import { copyFileSync, mkdirSync, writeFileSync } from 'fs'
+import { copyFileSync, existsSync, mkdirSync, writeFileSync } from 'fs'
 import { join } from 'path'
+import sharp from 'sharp'
 
 const root = process.cwd()
 const faviconsDir = join(root, 'public/static/favicons')
-const emojiCodepoint = '1fab7' // 🪷 lotus
-const twemojiUrl = `https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/${emojiCodepoint}.png`
+const logoPath = join(root, 'public/static/images/logo.png')
+
+if (!existsSync(logoPath)) {
+  throw new Error('Missing public/static/images/logo.png for favicon generation')
+}
 
 mkdirSync(faviconsDir, { recursive: true })
 
-const png = Buffer.from(await fetch(twemojiUrl).then((r) => {
-  if (!r.ok) throw new Error(`Failed to fetch Twemoji PNG: ${r.status}`)
-  return r.arrayBuffer()
-}))
-
 const favicon32 = join(root, 'public/favicon-32.png')
 const appleTouch = join(faviconsDir, 'apple-touch-icon.png')
+const favicon16 = join(faviconsDir, 'favicon-16x16.png')
+const favicon32Static = join(faviconsDir, 'favicon-32x32.png')
 
-writeFileSync(favicon32, png)
-writeFileSync(appleTouch, png)
+await sharp(logoPath).resize(32, 32).png().toFile(favicon32)
+await sharp(logoPath).resize(16, 16).png().toFile(favicon16)
+copyFileSync(favicon32, favicon32Static)
+await sharp(logoPath).resize(180, 180).png().toFile(appleTouch)
 
 const npx = (args) =>
   execFileSync('npx', ['--yes', ...args], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] })
@@ -29,7 +32,5 @@ const staticIco = join(faviconsDir, 'favicon.ico')
 
 writeFileSync(faviconIco, ico)
 copyFileSync(faviconIco, staticIco)
-copyFileSync(favicon32, join(faviconsDir, 'favicon-32x32.png'))
-copyFileSync(favicon32, join(faviconsDir, 'favicon-16x16.png'))
 
-console.log('Generated emoji favicons from Twemoji')
+console.log('Generated favicons from public/static/images/logo.png')
