@@ -1,4 +1,6 @@
 {
-  "generative-ai": 1,
+  "generative-ai": 2,
+  "language-model": 1,
+  "working-in-progress": 1,
   "computer-vision": 1
 }
