@@ -5,8 +5,36 @@ date: '2026-06-21'
 tags: ['generative AI', 'language model', 'working in progress']
 draft: false
 summary: 'Reading notes of the paper "In Enriched Category Theory of Language: From Syntax to Semantics"'
-authors: ['default']
+authors: ['Zehao Lu', 'Jiahao Zhang']
 ---
 
 Large language models (LLMs) have attracted significant attention beyond the NLP and AI communities. Researchers from other disciplines, particularly mathematicians and those interested in explainability in AI models, have sought to understand the sources of LLMs' remarkable capabilities, including what is learned beyond statistical pattern matching and how emergent abilities arise. Meanwhile, researchers developing the next generation of generative AI have been searching for more powerful mathematical frameworks to guide model development.
 In this blog, we explore a category-theoretic perspective on reverse-engineering the capabilities of LLMs. We believe this perspective offers an intriguing lens through which to understand their behavior and may provide a promising direction for future research. This blog is partially based on our reading of the paper ``An Enriched Category Theory of Language: From Syntax to Semantics''.
+
+# Theory of LLM
+
+Large language models are considered a solution to many classical NLP tasks, including Natural Language Generation (NLG) and Natural Language Understanding (NLU). However, it remains unclear why they work so well and where their **emergence** comes from. There have been many attempts to analyze this phenomenon using widely used mathematical tools, including analytical and probabilistic approaches.
+In this blog post, we introduce insights from the paper ''An Enriched Category Theory of Language: From Syntax to Semantics'', which aims to provide a higher-level perspective on the connection between NLG and NLU capabilities gained through training on next-token prediction. It does so by formally defining language structure (syntax) and language meaning (semantics) as categories, and leveraging the power of the Yoneda lemma.
+
+## Language Modelling
+
+AI models are trained on real-world data to optimize specific objectives. Through this training process, they learn patterns in the data and acquire the ability to perform tasks such as prediction, classification, and generation on previously unseen examples.
+Language models are a particular class of AI models that focus on modeling language. Broadly speaking, language can be viewed from two complementary perspectives:
+
+- Linguistic structure — including syntax, grammar, and surface form.
+- Meaning (semantics) — the underlying concepts and intentions conveyed by language.
+
+This distinction gives rise to two major research directions in Natural Language Processing (NLP):
+
+- Natural Language Understanding (NLU), which aims to infer meaning from linguistic structure.
+- Natural Language Generation (NLG), which aims to produce appropriate linguistic structure from an intended meaning.
+
+
+From this perspective, NLU can be viewed as a mapping from structure to meaning, while NLG can be viewed as the inverse mapping from meaning to structure. Consequently, training a language model may be understood as learning an approximation to the relationship between these two aspects of language. In an idealized sense, this relationship resembles a bidirectional mapping, although it is generally not a true mathematical bijection because multiple linguistic forms can express the same meaning, and a single expression can often be interpreted in multiple ways depending on context.
+\bigskip
+
+Language model trained on available data (the structure of language) by optimization. Different training paradigms for language models can be interpreted as capturing different families of 'maps' between tokens or linguistic units. For instance, Word2Vec captures local co-occurrence statistics via bag-of-words assumptions, GloVe models global co-occurrence through matrix factorization, BERT leverages masked token prediction, and autoregressive models learn next-token prediction. In the era of LLM, next-token prediction has proven particularly effective, achieving state-of-the-art performance across many tasks. At the same time, alternative approaches such as diffusion-based language models explore learning through denoising processes, potentially offering different approximations of the structure–semantics mapping.
+
+The next-token prediction paradigm of LLMs has become a hot topic within the AI community and has also drawn significant attention from the mathematics community. Both communities are interested in understanding where this power comes from. In particular, AI scientists are more interested in developing conceptual and philosophical insights that can guide the design of future model architectures and training paradigms, while mathematicians are more interested in building rigorous mathematical frameworks for understanding LLMs.
+
+In the next section, we will introduce how Bradley et al. attempt to build such a framework by leveraging category theory.
